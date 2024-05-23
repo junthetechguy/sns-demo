@@ -33,6 +33,7 @@ public class UserServiceTest {
         String password = "password";
 
         // join이 정상적으로 진행될때 순차적으로 수행되는 모든 동작들을 순서대로 mocking
+        // JPA에서 find는 Optional로 반환이되므로 Optional.of로 감싸주자
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty()); // 유저가 존재하지 않아야 하므로 empty로 반환이 되어야 함
         when(encoder.encode(password)).thenReturn("encrpt_password"); // String type으로 반환된다.
         when(userEntityRepository.save(any())).thenReturn(UserEntityFixture.get(userName, password, 1)); // any()는 그냥 바로 무조건 실행이 되는 것으로 일단 save가 되면 반드시 이 UserEntity class type이 나와야 한다.

@@ -36,7 +36,7 @@ public class PostService {
     public Post modify(String title, String body, String userName, Integer postId) {
         UserEntity userEntity = getUserEntityOrException(userName);
         PostEntity postEntity = getPostEntityOrException(postId);
-        // post permission
+        // 지금 접속된 유저와 글을 작성한 유저가 일치하는지 확인
         if (postEntity.getUser() != userEntity) {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", userName, postId));
         }
@@ -110,7 +110,8 @@ public class PostService {
     }
 
 
-    // 자주 쓰이는 코드들은 아래와 같이 따로 private 메소드로 빼주자.
+    // 자주 쓰이는 코드들(공통 logic 코드)은 아래와 같이 따로 private 메소드로 빼주자.
+
     private UserEntity getUserEntityOrException(String userName) {
         return userEntityRepository.findByUserName(userName).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not found", userName)));
@@ -118,7 +119,6 @@ public class PostService {
     }
 
     private PostEntity getPostEntityOrException(Integer postId) {
-        // user exist
         return postEntityRepository.findById(postId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.POST_NOT_FOUND, String.format("%s not found", postId)));
 

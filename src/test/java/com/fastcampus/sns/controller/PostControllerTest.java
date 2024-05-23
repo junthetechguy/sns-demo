@@ -85,12 +85,12 @@ public class PostControllerTest {
     }
 
     @Test
-    @WithAnonymousUser // login을 안했을 경우 anonymous 에러를 내보내는 것은 이와 같이 annotation 한줄로 표현이 가능하다
+    @WithAnonymousUser
     void 포스트수정시_로그인하지않은경우() throws Exception{
         String title = "title";
         String body = "body";
 
-        mockMvc.perform(put("/api/v1/posts/1")
+        mockMvc.perform(put("/api/v1/posts/1") // Update API는 put method이다
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
                 ).andDo(print())
@@ -103,8 +103,8 @@ public class PostControllerTest {
         String title = "title";
         String body = "body";
 
-        //when(postService.modify()) // modify 메소드가 void이므로 이것은 when으로 작성하면 안되고 doThrow when를 사용한다.
-        doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).modify(eq(title), eq(body), any(), eq(1));
+        // when(postService.modify()) // modify 메소드가 void이므로 이것은 when->thenReturn 으로 작성하면 안되고 doThrow when를 사용한다.
+        doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).modify(eq(title), eq(body), any(), eq(1)); // any()로 써서 아무거나 들어가도 된다고 했으므로 eq()인 equal로 집어넣는다.
 
         mockMvc.perform(put("/api/v1/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)

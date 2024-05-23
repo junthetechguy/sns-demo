@@ -68,7 +68,7 @@ public class PostServiceTest {
         Integer postId = 1;
 
 
-        // PostEntity mockPostEntity = mock(PostEntity.class); 이와 같이 mock을 해서 넣을바에 차라리 fixture를 만든다.
+        // PostEntity mockPostEntity = mock(PostEntity.class); 이와 같이 mock을 해서 넣을때는 너무 길어지므로 차라리 fixture를 만든다.
         PostEntity postEntity = PostEntityFixture.get(userName, postId, 1);
         UserEntity userEntity = postEntity.getUser();
 
@@ -110,7 +110,6 @@ public class PostServiceTest {
         PostEntity postEntity = PostEntityFixture.get(userName, postId, 1);
         UserEntity writer = UserEntityFixture.get("userName1", "password", 2);
 
-        // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(writer));
         when(postEntityRepository.findById(postId)).thenReturn(Optional.of(postEntity));
 
