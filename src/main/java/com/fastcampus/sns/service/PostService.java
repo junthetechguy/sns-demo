@@ -44,7 +44,7 @@ public class PostService {
         postEntity.setTitle(title);
         postEntity.setBody(body);
 
-        return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity)); // DB의 updated_at 필드에 정확한 시각을 반영하기 위해서 JPA의 save()가 아니라 saveAndFlush()를 사용하자.
+        return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity)); // DB의 updated_at 필드에 정확한 시각을 반영하기 위해서 JPA의 save()가 아니라 saveAndFlush()를 사용해서 Buffer를 flush하는 시점을 늦춰서 updated_at에 null이 아니라 제대로 시각이 들어가도록 하자.
     }
 
     @Transactional
