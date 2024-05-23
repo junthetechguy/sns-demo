@@ -1,1 +1,1 @@
-# sns-demo
+# sns
