@@ -47,7 +47,7 @@ public class PostServiceTest {
         Assertions.assertDoesNotThrow(() -> postService.create(title, body, userName));
     }
     @Test
-    void 포스트작성시_요정한유저가_존재하지않는경우() {
+    void 포스트작성시_요청한유저가_존재하지않는경우() {
         String title = "title";
         String body = "body";
         String userName = "userName";

@@ -42,7 +42,7 @@ public class PostControllerTest {
     private PostService postService;
 
     @Test
-    @WithMockUser // 로그인한 경우는 mock으로 구현하지 않고 annotation으로 바로 표현이 가능하다
+    @WithMockUser // 로그인한 경우는 when->thenReturn으로 구현하지 않고 annotation으로 바로 표현이 가능하다
     void 포스트작성() throws Exception{
         String title = "title";
         String body = "body";
@@ -55,7 +55,8 @@ public class PostControllerTest {
     }
 
     @Test
-    @WithAnonymousUser // 로그인하지 않은 경우는 mock으로 구현하지 않고 annotation으로 바로 표현이 가능하다
+    @WithAnonymousUser // 로그인하지 않은 경우는 when->thenReturn으로 구현하지 않고 annotation으로 바로 표현이 가능하다
+    // login하지 않았으므로 filter 부분에서 짤리게 된다
     void 포스트작성시_로그인하지않은경우() throws Exception{
         String title = "title";
         String body = "body";

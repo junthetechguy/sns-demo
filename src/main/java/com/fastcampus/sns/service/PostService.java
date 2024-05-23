@@ -25,11 +25,13 @@ public class PostService {
     private final CommentEntityRepository commentEntityRepository;
     private final AlarmEntityRepository alarmEntityRepository;
     private final AlarmService alarmService;
+
     @Transactional
     public void create(String title, String body, String userName) {
         UserEntity userEntity = getUserEntityOrException(userName);
         postEntityRepository.save(PostEntity.of(title, body, userEntity));
     }
+
     @Transactional
     public Post modify(String title, String body, String userName, Integer postId) {
         UserEntity userEntity = getUserEntityOrException(userName);
@@ -110,7 +112,6 @@ public class PostService {
 
     // 자주 쓰이는 코드들은 아래와 같이 따로 private 메소드로 빼주자.
     private UserEntity getUserEntityOrException(String userName) {
-        // post exist
         return userEntityRepository.findByUserName(userName).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not found", userName)));
 
