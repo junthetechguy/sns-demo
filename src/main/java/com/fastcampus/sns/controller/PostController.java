@@ -40,7 +40,7 @@ public class PostController {
     }
 
     @GetMapping
-    public Response<Page<PostResponse>> list(Pageable pageable, Authentication authentication) {
+    public Response<Page<PostResponse>> list(Pageable pageable, Authentication authentication) { // Paging을 위해서 Pageable로 받아와서 이 Pageable class안에 있는 메소드들로 Paging(Query param, sorting 등)을 구현하자
         return Response.success(postService.list(pageable).map(PostResponse::fromPost));
     }
 
