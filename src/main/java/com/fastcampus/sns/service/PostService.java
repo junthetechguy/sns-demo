@@ -44,8 +44,9 @@ public class PostService {
         postEntity.setTitle(title);
         postEntity.setBody(body);
 
-        return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity));
+        return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity)); // DB의 updated_at 필드에 정확한 시각을 반영하기 위해서 JPA의 save()가 아니라 saveAndFlush()를 사용하자.
     }
+
     @Transactional
     public void delete(String userName, Integer postId) {
         UserEntity userEntity = getUserEntityOrException(userName);

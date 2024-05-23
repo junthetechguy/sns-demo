@@ -22,7 +22,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public Response<Void> create(@RequestBody PostCreateRequest request, Authentication authentication) { // JwtTokenFilter에서 Authentication context를 넣어줬던 부분을 그대로 받아온다.
+    public Response<Void> create(@RequestBody PostCreateRequest request, Authentication authentication) { // JwtTokenFilter에서 Authentication context를 넣어줬던 부분을 그대로 받아와서 getName을 하여 name을 뽑아내면 Token에서 userName을 뽑아낸 셈이다.
         postService.create(request.getTitle(), request.getBody(), authentication.getName());
         return Response.success();
     }

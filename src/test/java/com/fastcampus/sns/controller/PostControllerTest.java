@@ -104,6 +104,7 @@ public class PostControllerTest {
         String body = "body";
 
         // when(postService.modify()) // modify 메소드가 void이므로 이것은 when->thenReturn 으로 작성하면 안되고 doThrow when를 사용한다.
+        // 근데 나는 modify 메소드를 void라고 안했는데 그냥 when->thenReturn으로 작성해도 될듯
         doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).modify(eq(title), eq(body), any(), eq(1)); // any()로 써서 아무거나 들어가도 된다고 했으므로 eq()인 equal로 집어넣는다.
 
         mockMvc.perform(put("/api/v1/posts/1")
