@@ -23,17 +23,21 @@ public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${jwt.secret-key}")
     private String key;
 
+    // application을 띄울때 FE 코드와 함께 Jar file로 말아서 띄우는데 그렇게 되면 FE 코드에는 API Header 설정하는 부분이 들어있어서 FE 코드를 통해서 API call을 할때는 문제가 없는데
+    // 내가 직접 localhost:8080으로 들어가서 view를 보는 동작(가령, favicon 가져 오는 요청)에 대해서 이때의 모든 reqeust에 대해서 token에서 user를 뽑아내는 동작이 걸리게 되므로
+    // 따라서 어느 경우에만 filter를 태울건지를 정하자.
     @Override
     public void configure(WebSecurity web) throws Exception {
+        // api가 path 정보에 들어있을때만 filter를 태운다. 나머지(가령, favicon 가져 오는 요청)은 filter를 아예 무시한다.
         web.ignoring().regexMatchers("^(?!/api/).*")
-                .antMatchers(HttpMethod.POST, "/api/*/users/join", "/api/*/users/login");
+                .antMatchers(HttpMethod.POST, "/api/*/users/join", "/api/*/users/login"); // 정의해둔 WebSecurity에서 정의한 부분(join, login)은 permit해준다는 의미
         // 모든 version에 대해서 일단 join과 login api path는 csrf를 open해줘도 된다.
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception { // HttpSecurity를 가져와서 configure을 설정하는 WebSecurityConfigurerAdapter의 method override
         http.csrf().disable() // 일단 csrf를 disable하고 내가 원하는 match 조건에 맞는 api만 잠근상태로 open해준다.
-                .authorizeRequests() // 위에 정의해둔 WebSecurity에서 정의한 부분(join, login)은 permit해준다는 의미
+                .authorizeRequests()
                 .antMatchers("/api/**").authenticated()  // join, login 하는 부분을 제외한 모든 부분은 항상 authentication이 이루어져야 한다.
                 .and()
                 .sessionManagement()
