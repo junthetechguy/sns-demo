@@ -15,8 +15,8 @@ import java.time.Instant;
 @Getter
 @Entity // Jpa Repository에서 사용될 entity임을 나타내는 Annotation
 @Table(name = "\"user\"") // postgreSQL 같은 경우에는 이미 user라는 table이 존재하므로 (실제로 테이블에 접근할 수 있는 user의 권한을 관리하는 테이블) 항상 ”\”를 user에 붙여야 내가 만든 user 테이블로 인식된다.
-@SQLDelete(sql = "UPDATE \"user\" SET deleted_at = NOW() WHERE id=?")
-@Where(clause = "deleted_at is NULL")
+@SQLDelete(sql = "UPDATE \"user\" SET deleted_at = NOW() WHERE id=?") // Delete의 경우 삭제된 시간을 넣어줄때 만약 delete sql이 날라오게 되면 이런식으로 deleted_at에 자동으로 시간이 들어가게 하자.
+@Where(clause = "deleted_at is NULL") // Select를 할때는 삭제가 안된 애들(deleted_at이 NULL인 애들)만 가지고 올 수 있게 하자.
 @NoArgsConstructor
 
 /*
@@ -28,7 +28,7 @@ db의 변경에는 영향을 주고 싶지 않을때가 존재하므로 언제�
  */
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB에서 Entity의 ID가 자동으로 Increase 됨
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB에서 Entity의 ID가 PostgreSQL에서 사용하는 Sequence로 Automatic Increase 됨
     private Integer id;
 
     @Column(name = "user_name") // DB 필드는 user_name으로 저장이 되지만 실제로 JPA에서의 Entity에서는 필드명이 userName으로 들어간다.
@@ -38,7 +38,7 @@ public class UserEntity {
     private String password;
 
     @Column(name = "role")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // Enum class의 경우 항상 이런식으로 이 Enum class를 쓰는 곳에서 그 Type을 정리해서 사용한다.
     private UserRole role = UserRole.USER;
 
     @Column(name = "register_at")
@@ -58,21 +58,25 @@ public class UserEntity {
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
-    @PrePersist
+    @PrePersist // DB에 Persist하게 Entity가 Create되기 전에 자동으로 시각을 자동으로 넣어준다.
     void registeredAt() {
         this.registeredAt = Timestamp.from(Instant.now());
     }
 
-    @PreUpdate
+    @PreUpdate // DB에 있는 Entity의 필드를 Update할 경우 Update하기 전에 그 수정 시각을 자동으로 넣어준다.
     void updatedAt() {
         this.updatedAt = Timestamp.from(Instant.now());
     }
 
-    public static UserEntity of(String userName, String password) {
+    public static UserEntity of(String userName, String password) { // User table에 UserEntity를 CRUD할때 DAO를 그대로 갖다가 넣는게 아니라 DAO를 최대한 분리하기 위한 of 메소드
         UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userName);
         userEntity.setPassword(password);
         return userEntity;
     }
+    /*
+    DB에 저장할때만 DAO인 Entity를 사용하고,
+    서비스단에서는 사용할때는 DTO로 분리해서 사용하여 최대한 DB 변화에 영향을 주면 안되도록 하자.
+     */
 
 }

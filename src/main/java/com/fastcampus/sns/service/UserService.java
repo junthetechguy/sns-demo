@@ -23,11 +23,13 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
+    // Bean으로 띄워져 있는 것을 @Autowired Annotation으로 받아오지 않아도 그냥 바로 이렇게 private final로 받아올 수 있다.
     private final UserEntityRepository userEntityRepository;
     private final AlarmEntityRepository alarmEntityRepository;
     private final BCryptPasswordEncoder encoder;
     private final UserCacheRepository userCacheRepository;
 
+    // key와 expired time은 hard coding하지 않고, soft coding으로 application.yaml에 configuration을 설정 후 받아오는 형태로 넣어주자.
     @Value("${jwt.secret-key}")
     private String secretKey;
 
@@ -35,8 +37,8 @@ public class UserService {
     private Long expiredTimeMs;
 
     @Transactional // DB Transaction 연산을 할때(가령, 회원가입시) 오류가 나게 되면
-    // 애초에 저장이 되면 안되는데(가령, 유저가 저장이 되면 안됨) @Transactional을 달아줌으로서 이런식으로 exception 발생시 자동으로 rollback이 되도록한다.
-    // 이 @Transactional이 없으면 회원가입시 오류가 났을때 회원가입이 제대로 처리가 되면 안되는데 회원 가입이 처리가 되어 버림
+    // 애초에 저장이 되면 안되는데(가령, 유저가 저장이 되면 안됨) @Transactional을 달아줌으로서 이런식으로 exception 발생시 자동으로 save한 것을 rollback이 되도록한다.
+    // 이 @Transactional이 없으면 회원가입시 오류가 났을때 회원가입이 제대로 처리가 되면(save가 되면 안됨) 안되는데 회원 가입이 처리가 되어 버림(save가 되어버림)
     public User join(String userName, String password) {
         // 회원가입하려는 userName으로 회원가입된 user가 있는지
         userEntityRepository.findByUserName(userName).ifPresent(it -> {

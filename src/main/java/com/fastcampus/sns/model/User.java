@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private Timestamp deletedAt;
 
 
-    public static User fromEntity(UserEntity entity) {
+    public static User fromEntity(UserEntity entity) { // DAO(Entity)를 DTO로 변환해주는 메소드
         return new User(
                 entity.getId(),
                 entity.getUserName(),

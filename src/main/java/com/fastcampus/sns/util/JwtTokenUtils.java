@@ -31,19 +31,19 @@ static 메소드를 사용하는 이유와 장단점은 다음과 같습니다:
                 .build().parseClaimsJws(token).getBody();
     }
     public static String generateToken(String userName, String key, long expiredTimeMs) {
-        Claims claims = Jwts.claims();
+        Claims claims = Jwts.claims(); // 이 Claims 안에 userName을 넣어서 이걸 통해 body를 만들게 된다.
         claims.put("userName", userName);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredTimeMs))
-                .signWith(getKey(key), SignatureAlgorithm.HS256)
+                .signWith(getKey(key), SignatureAlgorithm.HS256) // 이 key를 가지고 HS256 알고리즘(256byte hash 알고리즘)으로 암호화를 한다
                 .compact();
     }
 
     private static Key getKey(String key) {
-        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8); // key를 byte로 변환
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

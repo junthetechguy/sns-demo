@@ -18,6 +18,7 @@ public enum ErrorCode {
     ALARM_CONNECT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Connecting alarm occurs error")
     ;
 
+    // 각각의 ErrorCode가 가지는 Field 선언
     private HttpStatus status;
     private String message;
 }
