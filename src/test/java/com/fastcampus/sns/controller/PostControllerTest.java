@@ -150,7 +150,7 @@ public class PostControllerTest {
     @Test
     @WithMockUser
     void 포스트삭제시_작성자와_삭제요청자가_다를경우() throws Exception{
-        // mocking
+        // delete는 Return Type이 void이므로 when->thenReturn으로 작성하지 않고 doThrow로 작성한다
         doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).delete(any(), any());
 
         mockMvc.perform(delete("/api/v1/posts/1")
@@ -164,7 +164,7 @@ public class PostControllerTest {
     void 포스트삭제시_삭제하려는_포스트가_존재하지_않을_경우() throws Exception{
         // mocking
         doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).delete(any(), any());
-        // void이므로 when으로 작성하지 않고 doThrow로 작성한다
+
 
         mockMvc.perform(delete("/api/v1/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
