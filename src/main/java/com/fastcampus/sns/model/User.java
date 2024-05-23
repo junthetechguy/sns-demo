@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor // default constructor
 @AllArgsConstructor // 모든 인자 constructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User implements UserDetails {
+public class User implements UserDetails { // Token으로 User를 가지고 올때 UserDetails를 implement해서 override로 가지고 오지 않으면 제대로 user를 가져오지 못하므로 구현해주자.
     private Integer id;
     private String username;
     private String password;

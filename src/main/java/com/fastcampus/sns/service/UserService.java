@@ -68,7 +68,7 @@ public class UserService {
     }
 
     public User loadUserByUserName(String userName) {
-        // Redis에 없으면 UserEntityRepository에서 가져오고, 없으면 Exception을 낸다.
+        // 일단 Redis에서 찾아보고, Redis에 없으면 UserEntityRepository에서 가져오고 이때 User class의 형태로 가져오고, 없으면 Exception을 낸다.
         return userCacheRepository.getUser(userName).orElseGet(() ->
                 userEntityRepository.findByUserName(userName).map(User::fromEntity).orElseThrow(() ->
                         new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not found", userName)))

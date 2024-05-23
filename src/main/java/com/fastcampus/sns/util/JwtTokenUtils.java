@@ -23,10 +23,10 @@ static 메소드를 사용하는 이유와 장단점은 다음과 같습니다:
 
     public static boolean isExpired(String token, String key) {
         Date expiredDate = extractClaims(token, key).getExpiration();
-        return expiredDate.before(new Date());
+        return expiredDate.before(new Date()); // 지금 현재보다 더 이전인지 체크
     }
 
-    private static Claims extractClaims(String token, String key) {
+    private static Claims extractClaims(String token, String key) { // Token에서 Claims를 빼오는 method
         return Jwts.parserBuilder().setSigningKey(getKey(key))
                 .build().parseClaimsJws(token).getBody();
     }

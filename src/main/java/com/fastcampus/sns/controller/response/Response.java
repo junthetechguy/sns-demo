@@ -13,7 +13,7 @@ public class Response<T> { // 또한 이 class에서 회원가입 시에는 User
         return new Response<>(errorCode, null);
     }
 
-    public static Response<Void> success() {
+    public static Response<Void> success() { // result가 없는 Response
         return new Response<Void>("SUCCESS", null);
     }
 
@@ -21,7 +21,7 @@ public class Response<T> { // 또한 이 class에서 회원가입 시에는 User
         return new Response<>("SUCCESS", result);
     }
 
-    public String toStream() {
+    public String toStream() { // Response를 이쁘게 만들어주는 코드
         if(result == null) {
             return "{" +
                     "\"resultCode\":" + "\"" + resultCode + "\"," +

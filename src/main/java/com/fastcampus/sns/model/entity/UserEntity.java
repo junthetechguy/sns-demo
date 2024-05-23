@@ -68,7 +68,7 @@ public class UserEntity {
         this.updatedAt = Timestamp.from(Instant.now());
     }
 
-    public static UserEntity of(String userName, String password) { // User table에 UserEntity를 CRUD할때 DAO를 그대로 갖다가 넣는게 아니라 DAO를 최대한 분리하기 위한 of 메소드
+    public static UserEntity of(String userName, String password) { // User table에 UserEntity를 CRUD할때 DAO를 그대로 갖다가 넣는게 아니라 DAO를 최대한 분리하기 위해서 UserEntity를 반환하는 of 메소드
         UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userName);
         userEntity.setPassword(password);

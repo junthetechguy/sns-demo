@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtTokenFilter extends OncePerRequestFilter {
+public class JwtTokenFilter extends OncePerRequestFilter { // 매 reqeust 때마다 filter를 태울것이므로 OncePerReqeustFilter를 extends해서 override로 구현해주자.
 
     private final String key;
     private final UserService userService;
@@ -29,19 +29,22 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // 매 reqeust마다 token을 헤더에 넣어서 request가 오므로 이 filter에서 header에서 해당 token을 뽑아서
+        // 이 token에 들어있는 claims에 담긴 userName을 꺼내서 이 userName으로 실제 user가 유효한지 확인해주자.
         final String token;
         try {
             if(TOKEN_IN_PARAM_URLS.contains(request.getRequestURI())) {
                 log.info("Request with {} check the query param", request.getRequestURI());
                 token = request.getQueryString().split("=")[1].trim();
             } else {
+                // header의 Authorization에 필요한 정보가 들어있으므로 이것을 받아오자.
                 final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
                 if (header == null || !header.startsWith("Bearer ")) {
                     log.error("Error occurs while getting header. header is null or invalid {}", request.getRequestURL());
-                    filterChain.doFilter(request, response);
+                    filterChain.doFilter(request, response); // Error가 났어도 일단 성공했으므로 filterChain으로 이제 뒤에 filter들로 작업을 넘긴 후 return으로 filter 작업을 스스로 종료해준다.
                     return;
                 }
-                token = header.split(" ")[1].trim();
+                token = header.split(" ")[1].trim(); // header에서 Bearer 때고 token만 뽑아오기
             }
 
             if(JwtTokenUtils.isExpired(token, key)){
@@ -50,20 +53,21 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 return;
             }
 
+
+            // 만약 user도 valid하고, token도 valid하다면 이제 request context에 이 Authentication 정보를 넣어서 controller로 보내주자.
             String userName = JwtTokenUtils.getUserName(token, key);
             User user = userService.loadUserByUserName(userName);
-
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     user, null, List.of(new SimpleGrantedAuthority(user.getUserRole().toString()))
             );
-
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
         }catch (RuntimeException e) {
             log.error("Error occurs while validating, {}", e.toString());
             filterChain.doFilter(request, response);
             return;
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response); // 성공했으므로 filterChain으로 이제 뒤에 filter들로 작업을 넘긴다.
     }
 }

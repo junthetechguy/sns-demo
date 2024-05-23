@@ -39,7 +39,7 @@ public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 따로 관리하지 않으므로 그냥 STATELESS로 session을 처리하자.
                 .and()
-                .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class) // 매 request마다 filter를 하나 둬서 reqeust로 들어온 Token이 어떤 User를 가리키는지 체크하는 logic을 추가하기 위해서 Username과 Password Authenticaition Filter 이전에 이 JwtTokenFilter()를 태운다.
                 .exceptionHandling() // spring security쪽에서 인증하다가 exception이 던저질 경우 아래의 entry point로 가라는 의미
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
     }
