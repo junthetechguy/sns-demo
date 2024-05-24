@@ -2,15 +2,12 @@ package com.fastcampus.sns.controller.response;
 
 import com.fastcampus.sns.model.Alarm;
 import com.fastcampus.sns.model.AlarmArgs;
-import com.fastcampus.sns.model.User;
-import com.fastcampus.sns.model.entity.AlarmEntity;
 import com.fastcampus.sns.model.entity.AlarmType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 import java.sql.Timestamp;
-@Data // Getter, Setter, toString, equals, hashcode까지 모두 다 자동 생성
+@Getter
 @AllArgsConstructor
 public class AlarmResponse {
     private Integer id;
@@ -25,7 +22,7 @@ public class AlarmResponse {
         return new AlarmResponse(
                 alarm.getId(),
                 alarm.getAlarmType(),
-                alarm.getArgs(),
+                alarm.getAlarmArgs(),
                 alarm.getAlarmType().getAlarmText(),
                 alarm.getRegisteredAt(),
                 alarm.getUpdatedAt(),

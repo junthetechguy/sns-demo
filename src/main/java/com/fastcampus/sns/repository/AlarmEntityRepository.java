@@ -16,5 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface AlarmEntityRepository extends JpaRepository<AlarmEntity, Integer> {
+
+    // user_id로 index를 걸어줘야 한다.
     Page<AlarmEntity> findAllByUserId(Integer userId, Pageable pageable);
 }

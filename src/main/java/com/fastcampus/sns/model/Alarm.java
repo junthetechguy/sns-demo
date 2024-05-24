@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class Alarm {
     private Integer id;
     private AlarmType alarmType;
-    private AlarmArgs args;
+    private AlarmArgs alarmArgs;
     private Timestamp registeredAt;
     private Timestamp updatedAt;
     private Timestamp deletedAt;

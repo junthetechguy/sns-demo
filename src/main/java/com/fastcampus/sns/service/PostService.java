@@ -82,7 +82,7 @@ public class PostService {
         // like save
         likeEntityRepository.save(LikeEntity.of(userEntity, postEntity));
 
-        // alarm save
+        // alarm save(alarm이 누구에게 가는지(해당 post를 작성한 User=>postEntity.getUser(), 어떤 종류의 alarm인지(AlarmType.NEW_COMMENT_ON_POST), alarmArgs에 대한 정보 생성)
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
         alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
 
@@ -114,7 +114,8 @@ public class PostService {
 
         // comment save
         commentEntityRepository.save(CommentEntity.of(userEntity, postEntity, comment));
-        // alarm save
+
+        // alarm save(alarm이 누구에게 가는지(해당 post를 작성한 User=>postEntity.getUser(), 어떤 종류의 alarm인지(AlarmType.NEW_COMMENT_ON_POST), alarmArgs에 대한 정보 생성)
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
         alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
     }
