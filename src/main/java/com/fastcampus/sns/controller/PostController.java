@@ -66,8 +66,8 @@ public class PostController {
         return Response.success();
     }
 
-    @GetMapping("/{postId}/comments")
-    public Response<Page<CommentResponse>> comment(@PathVariable Integer postId, Pageable pageable, Authentication authentication) {
+    @GetMapping("/{postId}/comments") // comment list를 가져오는 API인데, 이때도 역시 Paging처리를 해줘야 한다.
+    public Response<Page<CommentResponse>> commentList(@PathVariable Integer postId, Pageable pageable, Authentication authentication) {
         return Response.success(postService.getComments(postId, pageable).map(CommentResponse::fromComment));
     }
 

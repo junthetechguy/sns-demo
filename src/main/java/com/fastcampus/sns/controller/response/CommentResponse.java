@@ -7,8 +7,8 @@ import lombok.Getter;
 
 import java.sql.Timestamp;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class CommentResponse {
     private Integer id;
 

@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Repository
 public interface LikeEntityRepository extends JpaRepository<LikeEntity, Integer> {
+    // 원래라면 여기에도 index를 거는게 성능상 더 이득이다.
     Optional<LikeEntity> findByUserAndPost(UserEntity user, PostEntity post); // 해당 user가 해당 post에 like한게 있는지 가져오기
 
 

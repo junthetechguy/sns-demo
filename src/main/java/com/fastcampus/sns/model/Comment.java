@@ -14,9 +14,9 @@ public class Comment {
 
     private String comment;
 
-    private String userName;
+    private String userName; // comment에서 필요한 user 정보는 userName만 필요하므로 User type이 아니라 String으로 설정해두자.
 
-    private Integer postId;
+    private Integer postId; // 마찬가지로 comment에서 필요한 post 정보는 postId만 필요하므로 Post type이 아니라 Integer로 설정해두자.
 
     private Timestamp registeredAt;
 

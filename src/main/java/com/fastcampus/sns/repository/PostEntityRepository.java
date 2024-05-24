@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostEntityRepository extends JpaRepository<PostEntity, Integer> {
+    // 원래라면 여기에도 index를 거는게 성능상 더 이득이다.
     Page<PostEntity> findAllByUser(UserEntity entity, Pageable pageable);
 }

@@ -22,8 +22,8 @@ import javax.transaction.Transactional;
 @Service // Service임을 명시하는 Annotation
 @RequiredArgsConstructor
 public class UserService {
-
-    // Bean으로 띄워져 있는 것을 @Autowired Annotation으로 받아오지 않아도 그냥 바로 이렇게 private final로 받아올 수 있다.
+    // Bean으로 띄워져 있는 것을 @Autowired Annotation으로 받아오지 않아도
+    // 그냥 바로 이렇게 private final로 받아올 수 있으므로 Service 단에서 사용하는 모든 bean들은 그냥 private final로 받아오자.
     private final UserEntityRepository userEntityRepository;
     private final AlarmEntityRepository alarmEntityRepository;
     private final BCryptPasswordEncoder encoder;

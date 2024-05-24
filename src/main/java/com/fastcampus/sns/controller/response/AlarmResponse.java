@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.sql.Timestamp;
-@Data
+@Data // Getter, Setter, toString, equals, hashcode까지 모두 다 자동 생성
 @AllArgsConstructor
 public class AlarmResponse {
     private Integer id;

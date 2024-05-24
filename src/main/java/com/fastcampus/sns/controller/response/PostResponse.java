@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.sql.Timestamp;
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class PostResponse {
     private Integer id;
 

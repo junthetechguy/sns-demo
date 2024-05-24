@@ -13,7 +13,7 @@ import java.time.Instant;
 @Getter
 @Entity
 @Table(name = "\"comment\"", indexes = {
-        @Index(name = "post_id_idx", columnList = "post_id")
+        @Index(name = "post_id_idx", columnList = "post_id") // postId로 index를 걸어준다. 근데 이때 하나의 post_id에 comment가 여러 개가 들어있을 수 있으므로 uk(Unique Key)는 아니므로 uk 설정은 하지 말자.
 })
 @SQLDelete(sql = "UPDATE \"comment\" SET deleted_at = NOW() WHERE id=?")
 @Where(clause = "deleted_at is NULL")
@@ -31,7 +31,7 @@ public class CommentEntity {
     private PostEntity post;
 
     @Column(name = "comment")
-    private String comment;
+    private String comment; // comment의 내용을 담는 column
 
     @Column(name = "register_at")
     private Timestamp registeredAt;
