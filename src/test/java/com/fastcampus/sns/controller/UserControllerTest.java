@@ -120,8 +120,8 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser
-    void 알람기능() throws Exception {
-        when(userService.alarmList(any(), any())).thenReturn(Page.empty());
+    void 알람기능() throws Exception { // 알람 기능 같은 경우에는 User 단위로 받으므로 User 단위의 API여야만 하므로 UserController와 UserService에 기능을 만들어줘야 한다.
+        when(userService.alarmList(any(), any())).thenReturn(Page.empty()); // alarm도 paging 처리가 필요하므로 Page로 받되 일단 무조건 동작시에는 empty page가 뜨게 된다.
         mockMvc.perform(get("/api/v1/users/alarm")
                     .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
