@@ -50,7 +50,7 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/likes")
-    public Response<Void> like(@PathVariable Integer postId, Authentication authentication) {
+    public Response<Void> like(@PathVariable Integer postId, Authentication authentication) { // 좋아요만 counting 되고 난 후에 가져올게 없으므로 그냥 Void로 Response를 받는다.
         postService.like(postId, authentication.getName());
         return Response.success();
     }

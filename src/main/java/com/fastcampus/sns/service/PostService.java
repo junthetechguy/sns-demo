@@ -73,13 +73,15 @@ public class PostService {
     public void like(Integer postId, String userName) {
         UserEntity userEntity = getUserEntityOrException(userName);
         PostEntity postEntity = getPostEntityOrException(postId);
-        // check liked -> throw
+
+        // check liked(이미 like한 사람이면) -> throw
         likeEntityRepository.findByUserAndPost(userEntity, postEntity).ifPresent(it -> {
             throw new SnsApplicationException(ErrorCode.ALREADY_LIKED, String.format("userName %s already liked post %s", userName, postId));
         });
 
         // like save
         likeEntityRepository.save(LikeEntity.of(userEntity, postEntity));
+
         // alarm save
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
         alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
@@ -87,10 +89,22 @@ public class PostService {
     }
 
     @Transactional
-    public long likeCount(Integer postId) { // null일 필요가 없으므로 Integer가 아니라 int로 반환해도 된다.
+    public long likeCount(Integer postId) { // null일 필요가 없으므로 Integer가 아니라 int로 반환해도 된다(근데 지금은 그냥 범위가 더 큰 long으로 가져온다)
+        // 만약에 null일 수도 있다면 Integer처럼 class로 wrapping을 한번 해줘야 한다.
+
+        // post가 존재할때만 like를 counting할 수 있으므로 먼저 post 존재 여부를 검사해준다.
         PostEntity postEntity = getPostEntityOrException(postId);
-        // count like
+
+        /* 아래와 같은 식으로 가져와서 count를 return하는것은 일단 likeEntity의 DB 상에서의 모든 row를 DB에서 싹 가지고 오기 때문에
+        지금 필요한 것은 갯수 뿐이므로 그냥 바로 postgres에서 count를 바로 가지고 오는 query를 이용하자.
+        즉, findAllByPost를 하면 모든 row를 다 가지고 와서 거기서 matching을 시작하므로 그냥 바로 갯수만 가지고 오는 light한 query를
+        날려서 가지고 오자.
+        List<LikeEntity> likeEntities = likeEntityRepository.findAllByPost(postEntity);
+        return likeEntities.size();
+        */
+
         return likeEntityRepository.countByPost(postEntity);
+        // 이러한 방법이 전체를 다 가지고 온 다음에 size를 계산하는 방식보다 훨씬 더 최적화(더 가벼운 query) 된 방식이다.
     }
 
     @Transactional
