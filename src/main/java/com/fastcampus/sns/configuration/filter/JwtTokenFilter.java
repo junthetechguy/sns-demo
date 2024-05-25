@@ -25,7 +25,7 @@ public class JwtTokenFilter extends OncePerRequestFilter { // 매 reqeust 때마
 
     private final String key;
     private final UserService userService;
-    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("api/v1/users/alarm/subscribe");
+    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("api/v1/users/alarm/subscribe"); // param에 token 정보가 담겨있는 API URL
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -33,7 +33,7 @@ public class JwtTokenFilter extends OncePerRequestFilter { // 매 reqeust 때마
         // 이 token에 들어있는 claims에 담긴 userName을 꺼내서 이 userName으로 실제 user가 유효한지 확인해주자.
         final String token;
         try {
-            if(TOKEN_IN_PARAM_URLS.contains(request.getRequestURI())) {
+            if (TOKEN_IN_PARAM_URLS.contains(request.getRequestURI())) {
                 log.info("Request with {} check the query param", request.getRequestURI());
                 token = request.getQueryString().split("=")[1].trim();
             } else {

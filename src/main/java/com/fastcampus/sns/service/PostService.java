@@ -84,8 +84,11 @@ public class PostService {
         // like save
         likeEntityRepository.save(LikeEntity.of(userEntity, postEntity));
 
-        // alarm save(alarm이 누구에게 가는지(해당 post를 작성한 User=>postEntity.getUser(), 어떤 종류의 alarm인지(AlarmType.NEW_COMMENT_ON_POST), alarmArgs에 대한 정보 생성)
+        // 생각을 해보면 Post에 comment나 like가 달리게 되면 alarmEntityRepository에 일단 save를 해서 DB에 저장을 한다음 alarm list api로 call이 들어왔을때 alarmEntity DB Table에서 그 해당하는 alarm들을 싹 다 긁어와서 리스트로 뿌려주는 형태이다.
+        // 따라서 먼저 alarmEntityRepository에 일단 save를 해서 DB에 저장을 하자. 이때는 alarm save(alarm이 누구에게 가는지(해당 post를 작성한 User=>postEntity.getUser(), 어떤 종류의 alarm인지(AlarmType.NEW_COMMENT_ON_POST), alarmArgs에 대한 정보 생성) 형태로 저장하자.
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
+
+        // 그리고 이제 Web Browser에 이러한 alarm이 발생했다고 send를 해줘서 알려줘야 한다.
         alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
 
     }
@@ -117,8 +120,11 @@ public class PostService {
         // comment save
         commentEntityRepository.save(CommentEntity.of(userEntity, postEntity, comment));
 
-        // alarm save(alarm이 누구에게 가는지(해당 post를 작성한 User=>postEntity.getUser(), 어떤 종류의 alarm인지(AlarmType.NEW_COMMENT_ON_POST), alarmArgs에 대한 정보 생성)
+        // 생각을 해보면 Post에 comment나 like가 달리게 되면 alarmEntityRepository에 일단 save를 해서 DB에 저장을 한다음 alarm list api로 call이 들어왔을때 alarmEntity DB Table에서 그 해당하는 alarm들을 싹 다 긁어와서 리스트로 뿌려주는 형태이다.
+        // 따라서 먼저 alarmEntityRepository에 일단 save를 해서 DB에 저장을 하자. 이때는 alarm save(alarm이 누구에게 가는지(해당 post를 작성한 User=>postEntity.getUser(), 어떤 종류의 alarm인지(AlarmType.NEW_COMMENT_ON_POST), alarmArgs에 대한 정보 생성) 형태로 저장하자.
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
+
+        // 그리고 이제 Web Browser에 이러한 alarm이 발생했다고 send를 해줘서 알려줘야 한다.
         alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
     }
 

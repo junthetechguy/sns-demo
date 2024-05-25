@@ -25,6 +25,7 @@ public class UserCacheRepository { // Redis에다가 user를 caching하고 이 R
     }
 
     // Redis에 존재하지 않을 경우에 Null로 반환되므로 nullable 처리를 쉽게 하기 위해서 Optional로 감싸준 다음 서비스 단에서 getUser(이 Redis).orElseGet(DB에서 확인하는 람다식)으로 nullable을 처리해주자.
+    // nullable 처리는 이런식으로 간단하게 처리해준다 => 애초에 데이터를 Optional.ofNullable로 가지고 온 후 이걸 받는 쪽에서 ifPresentorElse (람다식)으로 처리해준다.
     public Optional<User> getUser(String userName) {
         String key = getKey(userName); // 결국에 API call이 일어날때 username이 있는지 찾기 때문에(loaduserbyusername) 아싸리 username을 key로 설정해주자.
         User user = userRedisTemplate.opsForValue().get(key);
