@@ -55,6 +55,8 @@ public class PostService {
         if (postEntity.getUser() != userEntity) {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", userName, postId));
         }
+        // 이번 프로젝트에서는 post의 경우에만 delete가 존재하는데 이때 soft delete으로 들어가게 된다.
+        // 근데 post를 delete할때 post만 delete되는게 아니라 post에 딸린 comment나 like도 함께 delete(얘네도 soft delete)가 되어야 한다.
         likeEntityRepository.deleteAllByPost(postEntity);
         commentEntityRepository.deleteAllByPost(postEntity);
         postEntityRepository.delete(postEntity);

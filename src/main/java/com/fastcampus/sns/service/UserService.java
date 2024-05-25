@@ -77,6 +77,15 @@ public class UserService {
 
 
     public Page<Alarm> alarmList(Integer userId, Pageable pageable) {
+        // 이 method에서 param으로 userName을 받을 경우
+        // UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(()-> new SnsApplicationException(ErrorCode.USER_NOT_FOUND));
+        // return alarmEntityRepository.findAllByUser(userEntity, pageable).map(Alarm::fromEntity);
+
+        // 위와 같이 userName으로 받아서 이 userName으로 service 단에서 해당 userEntity가 있는지 없는지 검사 후 userEntity를 가져온 다음 해당 userEntity로 alarm을 찾을때 실제로는 alarm table에서
+        // 즉, AlarmEntity에서 user column이 실제로는 ManyToOne으로 JoinColumn이 user_id로 되어 잇으므로 이 말인 즉슨 실제 이 alarm table에는 user_id로 들어가 있어서
+        // 사실 이 userEntity로 alarm을 찾을때는 그냥 user_id로 한번에 줘서 찾도록 하면 service 단에서 해당 userEntity가 있는지 없는지 검사하는 코드가 사라지게 된다.
+
+
         return alarmEntityRepository.findAllByUserId(userId, pageable).map(Alarm::fromEntity);
     }
 }

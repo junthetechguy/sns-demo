@@ -58,8 +58,7 @@ public class JwtTokenFilter extends OncePerRequestFilter { // 매 reqeust 때마
             String userName = JwtTokenUtils.getUserName(token, key);
             User user = userService.loadUserByUserName(userName);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    user, null, user.getAuthorities()
-            );
+                    user, null, user.getAuthorities()); // Principal param에는 user를 넣고, credentials param은 null을 넣고, authorities param에는 해당 user의 userRole을 List 형태로 집어넣는다.
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 

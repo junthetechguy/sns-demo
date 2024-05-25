@@ -23,6 +23,7 @@ public class PostController {
 
     @PostMapping
     public Response<Void> create(@RequestBody PostCreateRequest request, Authentication authentication) { // JwtTokenFilter에서 Authentication context를 넣어줬던 부분을 그대로 받아와서 getName을 하여 name을 뽑아내면 Token에서 userName을 뽑아낸 셈이다.
+        // 즉, context에 setAuthentication으로 filter에서 만든 Authentication를 넣어줬기 때문에 이 authentication을 여기서 param으로 받아올 수 있게 된다.
         postService.create(request.getTitle(), request.getBody(), authentication.getName());
         return Response.success();
     }
@@ -33,7 +34,8 @@ public class PostController {
         return Response.success(PostResponse.fromPost(post));
     }
 
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/{postId}") // 이번 프로젝트에서는 delete api가 있는 것은 post의 경우에만 존재하는데 이때 soft delete으로 들어가게 된다.
+    // 근데 post를 delete할때 post만 delete되는게 아니라 post에 딸린 comment나 like도 함께 delete(얘네도 soft delete)가 되어야 한다.
     public Response<Void> delete(@PathVariable Integer postId, Authentication authentication) {
         postService.delete(authentication.getName(), postId);
         return Response.success();
