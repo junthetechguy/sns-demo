@@ -52,9 +52,13 @@ public class UserService {
 
     public String login(String userName, String password) {
         // 회원가입 여부 체크
-        User user = loadUserByUserName(userName);
-        userCacheRepository.setUser(user); // Redis에 Immutable Data인 user를 담아주기
+        // 원래는 아래 코드였지만 이 부분은 이미 해당 user가 Caching이 되어 있으면 Redis에서 바로 가지고 올 수 있으면 아래 부분으로 바꿔주자.
+        // UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(it -> {
+        //            throw new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s is not exist", userName));
+        //        });
 
+        User user = loadUserByUserName(userName);
+        userCacheRepository.setUser(user); // loigin 시점에 user를 Caching해주자.
 
         // 비밀번호 체크
         if(!encoder.matches(password, user.getPassword())) {
