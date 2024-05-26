@@ -2,7 +2,13 @@ package com.fastcampus.sns.service;
 
 import com.fastcampus.sns.exception.ErrorCode;
 import com.fastcampus.sns.exception.SnsApplicationException;
+import com.fastcampus.sns.model.AlarmArgs;
+import com.fastcampus.sns.model.entity.AlarmEntity;
+import com.fastcampus.sns.model.entity.AlarmType;
+import com.fastcampus.sns.model.entity.UserEntity;
+import com.fastcampus.sns.repository.AlarmEntityRepository;
 import com.fastcampus.sns.repository.EmitterRepository;
+import com.fastcampus.sns.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,15 +24,23 @@ public class AlarmService {
     private final static Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
     private final static String ALARM_NAME = "alarm"; // frontend에서 subscribe를 걸어둔게 alarm이라는 이름의 Event이므로 그 이름을 맞춰줘야한다.
     private final EmitterRepository emitterRepository;
+    private final AlarmEntityRepository alarmEntityRepository;
+    private final UserEntityRepository userEntityRepository;
 
-    public void send(Integer alarmId, Integer userId) {
+    // public void send(Integer alarmId, Integer userId) { // 이렇게 pararm을 받지 말고, AlarmEvent type에 맞게 param을 받아주자.
+    public void send(AlarmType type, AlarmArgs arg, Integer receiverUserId) {
+        // 원래는 like와 comment 기능을 PostService 단에서 alarm save하는 부분은 이쪽으로 가져옴(decoupling) 성공 alarm send 하는 부분은 consumer 쪽에서 event consume할때 동작하도록 함
+        UserEntity user = userEntityRepository.findById(receiverUserId).orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND));
+        AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(user, type, arg));
+
+
         // Browser connect당 하나의 인스턴스로 생기게 되는 SseEmitter들 중에 해당 브라우저에 해당되는 SseEmitter를 직접 찾아서 event 정보를 보내줘야 한다.
         // 따라서 이 SseEmitter(=결국 이게 Sse)를 저장할 class인 emitterRepository를 만들어주자.
-        emitterRepository.get(userId).ifPresentOrElse(sseEmitter -> { // userId로 저장을 했으므로 userId로 가져와주자.
+        emitterRepository.get(receiverUserId).ifPresentOrElse(sseEmitter -> { // userId로 저장을 했으므로 userId로 가져와주자.
             try {
-                sseEmitter.send(SseEmitter.event().id(alarmId.toString()).name(ALARM_NAME).data("new alarm")); // 프론트엔드로 alarm event를 보내주자.
+                sseEmitter.send(SseEmitter.event().id(alarmEntity.getId().toString()).name(ALARM_NAME).data("new alarm")); // 프론트엔드로 alarm event를 보내주자.
             } catch (IOException e) {
-                emitterRepository.delete(userId); // error가 발생하면 지워주자.
+                emitterRepository.delete(receiverUserId); // error가 발생하면 지워주자.
                 throw new SnsApplicationException(ErrorCode.ALARM_CONNECT_ERROR);
             }
         }, () -> log.info("No emitter found.")); // SseEmitter가 null일 경우에는 유저가 아직 Web Browser로 접속해있지 않았을 수도 있으므로 그냥 error로 처리하지말고 log로 한번 찍어주자.

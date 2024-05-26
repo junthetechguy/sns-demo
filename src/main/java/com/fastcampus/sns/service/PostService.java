@@ -6,6 +6,8 @@ import com.fastcampus.sns.model.AlarmArgs;
 import com.fastcampus.sns.model.Comment;
 import com.fastcampus.sns.model.Post;
 import com.fastcampus.sns.model.entity.*;
+import com.fastcampus.sns.model.event.AlarmEvent;
+import com.fastcampus.sns.producer.AlarmProducer;
 import com.fastcampus.sns.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ public class PostService {
     private final CommentEntityRepository commentEntityRepository;
     private final AlarmEntityRepository alarmEntityRepository;
     private final AlarmService alarmService;
+    private final AlarmProducer alarmProducer;
 
     @Transactional
     public void create(String title, String body, String userName) {
@@ -84,12 +87,18 @@ public class PostService {
         // like save
         likeEntityRepository.save(LikeEntity.of(userEntity, postEntity));
 
+
+
+        /*
         // 생각을 해보면 Post에 comment나 like가 달리게 되면 alarmEntityRepository에 일단 save를 해서 DB에 저장을 한다음 alarm list api로 call이 들어왔을때 alarmEntity DB Table에서 그 해당하는 alarm들을 싹 다 긁어와서 리스트로 뿌려주는 형태이다.
         // 따라서 먼저 alarmEntityRepository에 일단 save를 해서 DB에 저장을 하자. 이때는 alarm save(alarm이 누구에게 가는지(해당 post를 작성한 User=>postEntity.getUser(), 어떤 종류의 alarm인지(AlarmType.NEW_COMMENT_ON_POST), alarmArgs에 대한 정보 생성) 형태로 저장하자.
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
 
         // 그리고 이제 Web Browser에 이러한 alarm이 발생했다고 send를 해줘서 알려줘야 한다.
         alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
+        */ // 위의 두 로직은 user가 기다릴 필요가 없으므로 AlarmProducer로 send만 해준 후에 위의 두 메소드를 실행하여 SSE를 날리는 것은 consumer가 소비가 된 후에 메소드가 실행되서 SSE를 날리도록 하자.
+
+        alarmProducer.send(new AlarmEvent(postEntity.getUser().getId(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postId)));
 
     }
 
@@ -120,12 +129,18 @@ public class PostService {
         // comment save
         commentEntityRepository.save(CommentEntity.of(userEntity, postEntity, comment));
 
+        /*
         // 생각을 해보면 Post에 comment나 like가 달리게 되면 alarmEntityRepository에 일단 save를 해서 DB에 저장을 한다음 alarm list api로 call이 들어왔을때 alarmEntity DB Table에서 그 해당하는 alarm들을 싹 다 긁어와서 리스트로 뿌려주는 형태이다.
         // 따라서 먼저 alarmEntityRepository에 일단 save를 해서 DB에 저장을 하자. 이때는 alarm save(alarm이 누구에게 가는지(해당 post를 작성한 User=>postEntity.getUser(), 어떤 종류의 alarm인지(AlarmType.NEW_COMMENT_ON_POST), alarmArgs에 대한 정보 생성) 형태로 저장하자.
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
 
         // 그리고 이제 Web Browser에 이러한 alarm이 발생했다고 send를 해줘서 알려줘야 한다.
         alarmService.send(alarmEntity.getId(), postEntity.getUser().getId());
+        */ // 위의 두 로직은 user가 기다릴 필요가 없으므로 AlarmProducer로 send만 해준 후에 위의 두 메소드를 실행하여 SSE를 날리는 것은 consumer가 소비가 된 후에 메소드가 실행되서 SSE를 날리도록 하자.
+
+
+        alarmProducer.send(new AlarmEvent(postEntity.getUser().getId(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postId)));
+
     }
 
     public Page<Comment> getComments(Integer postId, Pageable pageable) {

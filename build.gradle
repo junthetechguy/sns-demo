@@ -28,6 +28,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.vladmihalcea:hibernate-types-52:2.17.3' // 내가 사용하는 jpa/hibernate는 jsonb type을 지원하지 않으므로 jsonb type을 entity의 속성으로 지정하기 위해 사용하는 opensource library
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis 관련 library들을 사용하기 위한 dependency 추가. 이런식으로 version명을 굳이 명시를 안하면 현재 app에 딱 들어맞는 Redis 버전이 들어가게 된다.
+	implementation 'org.springframework.kafka:spring-kafka' // kafka 관련 library를 사용하기 위한 dependency 추가.
 
 
 	compileOnly 'org.projectlombok:lombok'
