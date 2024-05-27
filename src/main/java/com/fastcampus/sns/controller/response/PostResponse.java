@@ -4,10 +4,12 @@ import com.fastcampus.sns.model.Post;
 import com.fastcampus.sns.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class PostResponse {
     private Integer id;
 

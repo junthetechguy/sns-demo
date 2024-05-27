@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class PostModifyRequest {
     private String title;
     private String body;

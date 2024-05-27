@@ -5,10 +5,12 @@ import com.fastcampus.sns.model.AlarmArgs;
 import com.fastcampus.sns.model.entity.AlarmType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class AlarmResponse {
     private Integer id;
     private AlarmType alarmType;

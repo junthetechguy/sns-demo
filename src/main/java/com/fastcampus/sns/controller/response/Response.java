@@ -2,9 +2,11 @@ package com.fastcampus.sns.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Response<T> { // 또한 이 class에서 회원가입 시에는 UserJoinResponse가 내려가겠지만 다른 동작을 할때는 다른 형태의 response가 내려가므로 Generic type으로 선언해주자.
     private String resultCode;
     private T result;

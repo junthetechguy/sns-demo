@@ -3,9 +3,11 @@ package com.fastcampus.sns.controller.response;
 import com.fastcampus.sns.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserResponse {
     private Integer id;
     private String userName;

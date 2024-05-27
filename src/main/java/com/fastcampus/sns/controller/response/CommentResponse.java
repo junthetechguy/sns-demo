@@ -4,11 +4,13 @@ import com.fastcampus.sns.model.Comment;
 import com.fastcampus.sns.model.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class CommentResponse {
     private Integer id;
 
