@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +21,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true) // JsonIgnore를 먹히게 하기 위한 Annotation
 public class User implements UserDetails { // Token으로 User를 가지고 올때 UserDetails를 implement해서 override로 가지고 오지 않으면 제대로 user를 가져오지 못하므로 구현해주자.
     private Integer id;
-    private String username;
+    private String username; // UserDetails에 getUsername() method를 implement 해야하므로 그냥 @Data로 퉁치도록 하자. 
     private String password;
     private UserRole userRole;
     private Timestamp registeredAt;
@@ -44,7 +43,7 @@ public class User implements UserDetails { // Token으로 User를 가지고 올�
 
     @Override // toString()을 Override해서 구현해서 Redis에 저장될때 instance의 hashcode 값이 아니라 username이 찍히도록 해주자.
     public String toString() {
-        return username;
+        return userName;
     }
 
     @Override
