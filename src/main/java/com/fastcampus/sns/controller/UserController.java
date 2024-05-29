@@ -37,7 +37,7 @@ public class UserController {
          */
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login") // health check 경로는 이 /login PATH로 한다.
     public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
         String token = userService.login(request.getName(), request.getPassword());
         return Response.success(new UserLoginResponse(token));
