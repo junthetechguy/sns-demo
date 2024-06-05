@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 // 결국에 이 AllArgsConstructor가 Reqeust Body에 들어오는 Json 정보를 가지고 Serialize 해서 Java Object로 만들어준다.
-@NoArgsConstructor // Cannot construct instance of error가 뜨므로 얘는 특별히 NoArgsConstructor까지 만들어주자.
+@NoArgsConstructor // Cannot construct instance of error가 뜨므로 그냥 모든 request와 response는 특별히 NoArgsConstructor까지 만들어주자.
 public class PostCommentRequest {
     private String comment;
 }
