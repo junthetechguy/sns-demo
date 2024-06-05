@@ -29,7 +29,7 @@ spring:
       sasl.mechanism: SCRAM-SHA-256
       sasl.jaas.config: 가이드에 쓰여있는 내용
 
-    consumer: # 원래 kafka에서 consumer와 producer를 별개의 서버 인스턴스로 분리시키지만 이번 프로젝트에서는 그냥 간단하게 하기 위해서 동일한 서버 인스턴스에서 사용하자.
+    consumer: # 원래 kafka에서 consumer와 producer를 별개의 서버 인스턴스로 분리시키지만 이번 프로젝트에서는 그냥 간단하게 하기 위해서 동일한 서버 인스턴스에서 사용해보자.
       properties.spring.json.trusted.packages: "*" # Json으로 변환을 할때(Serialize-Deserialize할때), 어떤 package를 trust하고 허용할거냐인데 전부 다 All로 해주자.
       bootstrap-servers: bootstrap 서버 정보들을 적으면 된다.
 
@@ -37,7 +37,7 @@ spring:
       auto-offset-reset: latest # consumer group이 먼저 뜬 후 그 다음부터 producer가 message를 producing할 수도 있지만 이미 producing이 진행되는 topic이 있고 consumer group이 나중에 뜨게 되면 이미 Broker에 쓰여져 있는 메시지들을
       # 처음부터 읽을지 아니면 가장 마지막에 producing된 메시지 부터 읽을지에 대한 옵션으로 내 프로젝트에서는 alarm 정보를 읽어야 하므로 가장 마지막 것부터 읽어도 상관이 없으므로 latest로 해주자.
       key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer # consumer는 message를 deserialize해야하므로 IntegerSerializer가 아니라 IntegerDeserializer를 넣자.
-      # key로 발생시킨 userId로 설정을 하면 알람은 유저의 동작에 다라서 알람이 발생을 하는데 그 동작의 순서가 보장이 되면 알람의 순서가 바뀔일이 없기 때문에 순서가 보장이 되기 때문에 userId는 Integer이므로 Interger deserializer를 걸어주자.
+      # key를 userId로 설정을 하면 알람은 유저의 동작에 따라서 알람이 발생을 하는데 그 동작의 순서가 보장이 되면 알람의 순서가 바뀔일이 없기 때문에 순서가 보장이 되기 때문에 userId는 Integer이므로 Interger deserializer를 걸어주자.
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       # value는 event에 대해서(=내 프로젝트에서는 alarm event) object로 만들어서 넣어주면 더 편하므로 JsonDeserializer를 이용하자.
     listener:
