@@ -103,9 +103,7 @@ public class PostControllerTest {
         String title = "title";
         String body = "body";
 
-        // when(postService.modify()) // modify 메소드가 void이므로 이것은 when->thenReturn 으로 작성하면 안되고 doThrow when를 사용한다.
-        // 근데 나는 modify 메소드를 void라고 안했는데 그냥 when->thenReturn으로 작성해도 될듯
-        doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).modify(eq(title), eq(body), any(), eq(1)); // any()로 써서 아무거나 들어가도 된다고 했으므로 eq()인 equal로 집어넣는다.
+        when(postService.modify(eq(title), eq(body), any(), eq(1))).thenThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)); // any()로 써서 아무거나 들어가도 된다고 했으므로 eq()인 equal로 집어넣는다.
 
         mockMvc.perform(put("/api/v1/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -120,7 +118,7 @@ public class PostControllerTest {
         String title = "title";
         String body = "body";
 
-        doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).modify(eq(title), eq(body), any(), eq(1));
+        when(postService.modify(eq(title), eq(body), any(), eq(1))).thenThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND));
 
         mockMvc.perform(put("/api/v1/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -162,7 +160,6 @@ public class PostControllerTest {
     @Test
     @WithMockUser
     void 포스트삭제시_삭제하려는_포스트가_존재하지_않을_경우() throws Exception{
-        // mocking
         doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).delete(any(), any());
 
 
@@ -215,6 +212,7 @@ public class PostControllerTest {
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());
     }
+
     @Test
     @WithMockUser
     void 좋아요기능() throws Exception{

@@ -40,7 +40,7 @@ public class UserService {
     // 애초에 저장이 되면 안되는데(가령, 유저가 저장이 되면 안됨) @Transactional을 달아줌으로서 이런식으로 exception 발생시 자동으로 save한 것을 rollback이 되도록한다.
     // 이 @Transactional이 없으면 회원가입시 오류가 났을때 회원가입이 제대로 처리가 되면(save가 되면 안됨) 안되는데 회원 가입이 처리가 되어 버림(save가 되어버림)
     public User join(String userName, String password) {
-        // 회원가입하려는 userName으로 회원가입된 user가 있는지
+        // 회원가입하려는 userName으로 회원가입된 user가 있는지 확인해준다.
         userEntityRepository.findByUserName(userName).ifPresent(it -> {
             throw new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, String.format("%s is duplicated", userName));
         });
@@ -58,7 +58,7 @@ public class UserService {
         //        });
 
         User user = loadUserByUserName(userName);
-        userCacheRepository.setUser(user); // loigin 시점에 user를 Caching해주자.
+        userCacheRepository.setUser(user); // login 시점에 user를 Caching해주자.
 
         // 비밀번호 체크
         if(!encoder.matches(password, user.getPassword())) {

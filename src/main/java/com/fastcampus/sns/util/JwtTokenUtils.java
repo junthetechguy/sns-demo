@@ -11,11 +11,12 @@ import java.util.Date;
 
 public class JwtTokenUtils {
     /*
-    자바에서 메소드에 static을 붙이는 주된 이유 중 하나는 유틸리티(utility) 메소드를 다른 클래스에서 객체 인스턴스를 생성하지 않고도 손쉽게 사용할 수 있도록 하기 위함입니다. static 메소드는 클래스 레벨에서 호출되기 때문에 클래스의 인스턴스를 생성할 필요가 없습니다. 이러한 특성 때문에 static 메소드는 유틸리티 기능을 제공하는 클래스(예: java.lang.Math, java.util.Collections)에서 자주 사용됩니다.
-static 메소드를 사용하는 이유와 장단점은 다음과 같습니다:
-장점
-인스턴스 생성 불필요: static 메소드는 객체의 인스턴스 없이 호출할 수 있어 메모리 효율적입니다.
-편리성: 객체를 생성하지 않고 바로 클래스 이름을 통해 메소드에 접근할 수 있어, 유틸리티 함수를 쉽게 사용할 수 있습니다.
+    자바에서 메소드에 static을 붙이는 주된 이유 중 하나는 유틸리티(utility) 메소드를 다른 클래스에서 객체 인스턴스를 생성하지 않고도 손쉽게 사용할 수 있도록 하기 위함이다.
+    static 메소드는 클래스 레벨에서 호출되기 때문에 클래스의 인스턴스를 생성할 필요가 없으므로 static 메소드는 유틸리티 기능을 제공하는 클래스에서 자주 사용됨.
+    static 메소드를 사용하는 이유와 장단점은 다음과 같습니다:
+    장점
+    인스턴스 생성 불필요: static 메소드는 객체의 인스턴스 없이 호출할 수 있어 메모리 효율적입니다.
+    편리성: 객체를 생성하지 않고 바로 클래스 이름을 통해 메소드에 접근할 수 있어, 유틸리티 함수를 쉽게 사용할 수 있습니다.
      */
     public static String getUserName(String token, String key) {
         return extractClaims(token, key).get("userName", String.class);
@@ -38,7 +39,7 @@ static 메소드를 사용하는 이유와 장단점은 다음과 같습니다:
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredTimeMs))
-                .signWith(getKey(key), SignatureAlgorithm.HS256) // 이 key를 가지고 HS256 알고리즘(256byte hash 알고리즘)으로 암호화를 한다
+                .signWith(getKey(key), SignatureAlgorithm.HS256) // 이 key를 가지고 HS256 알고리즘(256bit hash 알고리즘)으로 암호화를 한다
                 .compact();
     }
 

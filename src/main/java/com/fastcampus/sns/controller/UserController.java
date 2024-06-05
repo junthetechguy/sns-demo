@@ -25,19 +25,21 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 // @RequiredArgsConstructor는 반드시 초기화되어야 하는 필드만(final로 선언된 필드나 @NonNull) 만을 매개변수로 사용하는 생성자를 생성
 public class UserController {
 
-    private final UserService userService; // 항상 Service 부분은 final로 설정해두는게 관례이다.
+    private final UserService userService; // private final로 bean(controller에서 받아올 bean은 Service밖에 없음)을 받아온다.
     private final AlarmService alarmService;
 
+    // request call 자체는 controller package에서 받아오고,
+    // 그 내부 동작은 service package에서 이루어진다.
     @PostMapping("/join")
     public Response<UserJoinResponse> join(@RequestBody UserJoinRequest request) {
         User user = userService.join(request.getName(), request.getPassword());
         return Response.success(UserJoinResponse.fromUser(user));
         /*
-        UserJoinResponse 그대로 반환해줄수도 있지만 response를 내려줄때 성공하는 경우가 있고, 실패하는 경우가 있는데 이때마다 각각 response 값이 제각각이면 이 API를 가져다 쓰는 프론트엔드쪽에서 이 response를 parsing하기가 굉장히 어려우므로 획일화된 template 형태의 response template을 만들어주고 내가 내려줄 response의 형태에 따라서 해당되는 response를 넣어주기위해서 response package에 Response class를 만들어주자.
-         */
+        그냥 바로 그대로 UserJoinResponse로 반환해줄수도 있지만 response를 내려줄때 성공하는 경우가 있고, 실패하는 경우가 있는데 이때마다 각각 response 값이 제각각이면 이 API를 가져다 쓰는 프론트엔드쪽에서 이 response를 parsing하기가 굉장히 어려우므로 획일화된 template 형태의 response template을 만들어주고 내가 내려줄 response의 형태에 따라서 해당되는 response를 넣어주기위해서 response package에 Response class를 만들어주자.
+        */
     }
 
-    @PostMapping("/login") // health check 경로는 이 /login PATH로 한다.
+    @PostMapping("/login") // health check 경로는 이 /login PATH로 한다 => 언제나 살아있고 항상 모든 Source로 부터 이 /login API PATH는 열려있으므로.
     public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
         String token = userService.login(request.getName(), request.getPassword());
         return Response.success(new UserLoginResponse(token));

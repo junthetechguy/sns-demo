@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 
 @Service
@@ -25,8 +24,6 @@ public class PostService {
     private final UserEntityRepository userEntityRepository;
     private final LikeEntityRepository likeEntityRepository;
     private final CommentEntityRepository commentEntityRepository;
-    private final AlarmEntityRepository alarmEntityRepository;
-    private final AlarmService alarmService;
     private final AlarmProducer alarmProducer;
 
     @Transactional
@@ -47,7 +44,8 @@ public class PostService {
         postEntity.setTitle(title);
         postEntity.setBody(body);
 
-        return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity)); // DB의 updated_at 필드에 정확한 시각을 반영하기 위해서 JPA의 save()가 아니라 saveAndFlush()를 사용해서 Buffer를 flush하는 시점을 늦춰서 updated_at에 null이 아니라 제대로 시각이 들어가도록 하자.
+        return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity));
+        // DB의 updated_at 필드에 정확한 시각을 반영하기 위해서 JPA의 save()가 아니라 saveAndFlush()를 사용해서 Buffer를 flush하는 시점을 늦춰서 updated_at에 null이 아니라 제대로 시각이 들어가도록 하자.
     }
 
     @Transactional
@@ -90,7 +88,7 @@ public class PostService {
 
 
         /*
-        // 생각을 해보면 Post에 comment나 like가 달리게 되면 alarmEntityRepository에 일단 save를 해서 DB에 저장을 한다음 alarm list api로 call이 들어왔을때 alarmEntity DB Table에서 그 해당하는 alarm들을 싹 다 긁어와서 리스트로 뿌려주는 형태이다.
+        // 생각을 해보면 Post에 like나 comment가 달리게 되면 alarmEntityRepository에 일단 save를 해서 DB에 저장을 한다음 alarm list api로 call이 들어왔을때 alarmEntity DB Table에서 그 해당하는 alarm들을 싹 다 긁어와서 리스트로 뿌려주는 형태이다.
         // 따라서 먼저 alarmEntityRepository에 일단 save를 해서 DB에 저장을 하자. 이때는 alarm save(alarm이 누구에게 가는지(해당 post를 작성한 User=>postEntity.getUser(), 어떤 종류의 alarm인지(AlarmType.NEW_COMMENT_ON_POST), alarmArgs에 대한 정보 생성) 형태로 저장하자.
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())));
 

@@ -6,7 +6,6 @@ import com.fastcampus.sns.exception.ErrorCode;
 import com.fastcampus.sns.exception.SnsApplicationException;
 import com.fastcampus.sns.model.User;
 import com.fastcampus.sns.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest // Test Code는 언제나 @SpringBootTest를 달아준다.
 @AutoConfigureMockMvc // API 형태의 테스트(=Controller단 테스트)를 작성하므로 @AutoConfigureMockMvc를 달아준다.
-// Service단 테스트는 @AutoConfigureMockMvc를 달지 않는다
+// Service단 테스트는 API 형태의 테스트가 아니고 그냥 비즈니스 로직만 돌아가는 부분이므로 @AutoConfigureMockMvc를 달지 않는다
 public class UserControllerTest {
 
     @Autowired // 미리 Framework단에서 만들어진 MockMvc Bean을 가져다 꽂는 것.
-    private MockMvc mockMvc; // 이 Test 코드에서 Test할 것만(가령, Controller Test에서는 MockMvc, ObjectMapper 만) Autowired로 받아오고, 나머지는 전부 다 MockBean으로 만들어주자.
+    private MockMvc mockMvc; // 이 Test 코드에서 Test할 것만(가령, Controller Test에서는 MockMvc, ObjectMapper 만) Autowired로 받아오고, 나머지는 전부 다 MockBean으로 받아오자.
 
     @Autowired // 미리 Framework단에서 만들어진 ObjectMapper Bean을 가져다 꽂는 것.
     private ObjectMapper objectMapper;
@@ -42,15 +41,17 @@ public class UserControllerTest {
     private UserService userService;
 
     @Test
-    public void 회원가입() throws Exception {
+    void 회원가입() throws Exception { // 항상 controller test code는 throws Exception을 해야하고, service test code는 안해도 되지만 항상 둘다 void의 형태이다.
         // 요구사항 분석에서 분석해놓은 회원가입시 필요한 정보 2가지
         String userName = "userName";
         String password = "password";
 
         // join이 정상적으로 진행될때 순차적으로 수행되는 모든 동작을(여기선 유일하게 join service logic이 들어가는 것 뿐) 순서대로 mocking
         // mocking하는 부분 : Service logic이 돌아가는 부분으로 when->thenReturn의 구조로 진행.
-        when(userService.join(userName, password)).thenReturn(mock(User.class)); // 정상적으로 동작이 되어야하므로 User.class가 반환이 되어야 함. 또한 when->thenReturn의 경우 Object Type만 본다. 가령, 같은 클래스인지 등
-        // 회원가입이 성공했을때 실제 그 User가 몇 번째 User인지 내부에서 관리하는 UserId를 같이 반환해주면 이 사람이 정상적으로 회원가입했는지 관리하기 더 쉬워지게 된다.
+        when(userService.join(userName, password)).thenReturn(mock(User.class));
+        // 정상적으로 동작이 되어야하므로 User.class가 반환이 되어야 함. 또한 when->thenReturn의 경우 Object Type만 본다. 가령, 같은 클래스인지 등을 파악한다.
+
+        // 언제나 Controller 단 test code는 먼저 service 동작을 when->then으로 확인 후 mockMvc.perform으로 API test를 해주자.
 
         mockMvc.perform(post("/api/v1/users/join")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -61,11 +62,11 @@ public class UserControllerTest {
     }
 
     @Test
-    public void 회원가입시_이미_회원가입된_userName으로_회원가입을_하는경우_에러반환() throws Exception{
+    void 회원가입시_이미_회원가입된_userName으로_회원가입을_하는경우_에러반환() throws Exception{
         String userName = "userName";
         String password = "password";
 
-        // reason code가 제대로 떨어지는지 확인하자.
+
         when(userService.join(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME));
 
         mockMvc.perform(post("/api/v1/users/join")
@@ -76,7 +77,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void 로그인() throws Exception {
+    void 로그인() throws Exception {
         String userName = "userName";
         String password = "password";
 
@@ -91,7 +92,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void 로그인시_회원가입이_안된_userName을_입력할경우_에러반환() throws Exception {
+    void 로그인시_회원가입이_안된_userName을_입력할경우_에러반환() throws Exception {
         String userName = "userName";
         String password = "password";
 
@@ -105,7 +106,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void 로그인시_틀린_password를_입력할경우_에러반환() throws Exception {
+    void 로그인시_틀린_password를_입력할경우_에러반환() throws Exception {
         String userName = "userName";
         String password = "password";
 

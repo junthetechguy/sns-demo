@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -63,7 +62,7 @@ public class UserServiceTest {
 
         UserEntity fixture = UserEntityFixture.get(userName, password, 1);
 
-        // 로그인을 하는 부분에서는 password를 비교하는 부분이 있는데 그냥 이것도 비교하는 logic을 만들면 귀찮으므로 test용 UserEntity인  fixture를 하나 만들어두자.
+        // 로그인을 하는 부분에서는 password를 비교하는 부분(encoder.matches())이 있는데 그냥 이것도 비교하는 logic을 만들면 귀찮으므로 test용 UserEntity인  fixture를 하나 만들어두자.
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture)); // 로그인 했을때는 반드시 UserEntity Type의 Object가 찾아져야함.
         when(encoder.matches(password, fixture.getPassword())).thenReturn(true);
 

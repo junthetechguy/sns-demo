@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
 
+// 항상 Entity는 @Setter, @Getter, @Entity, @NoArgsConstructor가 필수다.
 @Setter
 @Getter
 @Entity // Jpa Repository에서 사용될 entity임을 나타내는 Annotation
@@ -18,7 +19,6 @@ import java.time.Instant;
 @SQLDelete(sql = "UPDATE \"user\" SET deleted_at = NOW() WHERE id=?") // Delete의 경우 삭제된 시간을 넣어줄때 만약 delete sql이 날라오게 되면 이런식으로 deleted_at에 자동으로 시간이 들어가게 하자.
 @Where(clause = "deleted_at is NULL") // Select를 할때는 삭제가 안된 애들(deleted_at이 NULL인 애들)만 가지고 올 수 있게 하자.
 @NoArgsConstructor
-
 /*
 model의 entity는 DAO로 실제로 DB의 Table에서 부터 Jpa Repository(@Repository 붙은 것들)을 통해서 실제로 mapping되는 클래스들의 집합이고,
 model에 속하지만 entity가 아닌 것들은 DTO로 DAO에서 정보를 가지고 와서 서비스 단에서 뭔가를 처리할 때 사용한다.
@@ -68,7 +68,8 @@ public class UserEntity {
         this.updatedAt = Timestamp.from(Instant.now());
     }
 
-    public static UserEntity of(String userName, String password) { // User table에 UserEntity를 CRUD할때 DAO를 그대로 갖다가 넣는게 아니라 DAO를 최대한 분리하기 위해서 UserEntity를 반환하는 of 메소드
+    // User table에 UserEntity를 CRUD할때 DAO를 그대로 갖다가 넣는게 아니라 DAO를 최대한 분리하기 위해서 UserEntity를 반환하는 of 메소드
+    public static UserEntity of(String userName, String password) {
         UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userName);
         userEntity.setPassword(password);

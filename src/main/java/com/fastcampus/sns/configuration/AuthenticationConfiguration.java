@@ -23,8 +23,8 @@ public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${jwt.secret-key}")
     private String key;
 
-    // application을 띄울때 FE 코드와 함께 Jar file로 말아서 띄우는데 그렇게 되면 FE 코드에는 API Header 설정하는 부분이 들어있어서 FE 코드를 통해서 API call을 할때는 문제가 없는데
-    // 내가 직접 localhost:8080으로 들어가서 view를 보는 동작(가령, favicon 가져 오는 요청)에 대해서 이때의 모든 reqeust에 대해서 token에서 user를 뽑아내는 동작이 걸리게 되므로
+    // application을 띄울때 FE 코드와 함께 Jar file로 말아서 띄우는데 그렇게 되면 FE 코드에는 API Header를 설정하는 부분이 들어있어서 FE 코드를 통해서 API call을 할때는 문제가 없는데
+    // 내가 만약 직접 localhost:8080으로 들어가서 view를 보는 동작(가령, favicon 가져 오는 요청)에 대해서 이때의 모든 reqeust에 대해서 token에서 user를 뽑아내는 동작이 걸리게 되므로
     // 따라서 어느 경우에만 filter를 태울건지를 정하자.
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -43,7 +43,8 @@ public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 따로 관리하지 않으므로 그냥 STATELESS로 session을 처리하자.
                 .and()
-                .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class) // 매 request마다 filter를 하나 둬서 reqeust로 들어온 Token이 어떤 User를 가리키는지 체크하는 logic을 추가하기 위해서 Username과 Password Authenticaition Filter 이전에 이 JwtTokenFilter()를 태운다.
+                .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class)
+                // 매 request마다 filter를 하나 둬서 reqeust로 들어온 Token이 어떤 User를 가리키는지 체크하는 logic을 추가하기 위해서 Username과 Password Authenticaition Filter 이전에 이 JwtTokenFilter()를 태운다.
                 .exceptionHandling() // spring security쪽에서 인증하다가 exception이 던저질 경우 아래의 entry point로 가라는 의미
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
     }
