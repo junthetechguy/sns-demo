@@ -22,7 +22,7 @@ public class GlobalControllerAdvice { // exception을 던졌을때 response에 �
     @ExceptionHandler(RuntimeException.class) // 내가 코드단에서 관리하는 exception들인 SnsApplicationException.class 형태의 Exception이 발생했을때만 잡아서 던지는게 아니라 실제로 앱 Runtime시 발생하는 에러들도 모두 다 발생했을때도 잡아서 던질 수 있게 RuntimeException을 잡아서 던지자
     public ResponseEntity<?> applicationHandler(RuntimeException e) {
         log.error("Error occurs {}", e.toString());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
                 .body(Response.error(ErrorCode.INTERNAL_SERVER_ERROR.name()));
     }
 }

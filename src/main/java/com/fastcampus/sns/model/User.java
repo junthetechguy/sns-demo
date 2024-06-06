@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
-// @Getter // @Getter만 있으면 Redis에 저장할때 toString()이 없어서 이 instance의 hashcode 값이 찍히므로 @Data로 변환해주자.
+// @Getter // @Getter만 있으면 Redis에 저장할때 toString()이 없어서 이 instance의 hashcode 값이 찍히므로 @Data로 달아주자.
 @Data
 @NoArgsConstructor // default constructor : Redis에 객체를 만들때는 먼저 NoArgsConstructor를 이용해서 생성 후 data를 채우므로 @NoArgsConstructor를 달아주자.
 @AllArgsConstructor // 모든 인자 constructor
@@ -41,9 +41,9 @@ public class User implements UserDetails { // Token으로 User를 가지고 올�
         );
     }
 
-    @Override // toString()을 Override해서 구현해서 Redis에 저장될때 instance의 hashcode 값이 아니라 username이 찍히도록 해주자.
+    @Override // toString()을 Override해서 구현함으로서 Redis에 저장될때 instance의 hashcode 값이 아니라 username이 찍히도록 해주자.
     public String toString() {
-        return userName;
+        return username;
     }
 
     @Override

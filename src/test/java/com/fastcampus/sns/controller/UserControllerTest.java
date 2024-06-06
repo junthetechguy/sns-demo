@@ -41,7 +41,7 @@ public class UserControllerTest {
     private UserService userService;
 
     @Test
-    void 회원가입() throws Exception { // 항상 controller test code는 throws Exception을 해야하고, service test code는 안해도 되지만 항상 둘다 void의 형태이다.
+    void 회원가입() throws Exception { // 항상 controller test code는 throws Exception을 해야하고, service test code는 안해도 되지만 항상 둘 다 void의 형태이다.
         // 요구사항 분석에서 분석해놓은 회원가입시 필요한 정보 2가지
         String userName = "userName";
         String password = "password";
@@ -51,7 +51,7 @@ public class UserControllerTest {
         when(userService.join(userName, password)).thenReturn(mock(User.class));
         // 정상적으로 동작이 되어야하므로 User.class가 반환이 되어야 함. 또한 when->thenReturn의 경우 Object Type만 본다. 가령, 같은 클래스인지 등을 파악한다.
 
-        // 언제나 Controller 단 test code는 먼저 service 동작을 when->then으로 확인 후 mockMvc.perform으로 API test를 해주자.
+        // 언제나 Controller 단 test code는 먼저 service 동작을 when->then으로 mocking scenario를 설정 후 mockMvc.perform으로 API test를 해주자.
 
         mockMvc.perform(post("/api/v1/users/join")
                 .contentType(MediaType.APPLICATION_JSON)

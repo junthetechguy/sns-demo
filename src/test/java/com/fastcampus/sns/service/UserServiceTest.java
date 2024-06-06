@@ -78,7 +78,6 @@ public class UserServiceTest {
 
         SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class, () -> userService.login(userName, password));
         Assertions.assertEquals(ErrorCode.USER_NOT_FOUND, e.getErrorCode());
-
     }
 
     @Test
@@ -93,7 +92,4 @@ public class UserServiceTest {
         SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class, () -> userService.login(userName, wrongPassword));
         Assertions.assertEquals(ErrorCode.INVALID_PASSWORD, e.getErrorCode());
     }
-
-
-
 }

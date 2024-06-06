@@ -31,6 +31,7 @@ public class PostServiceTest {
 
     @MockBean
     private PostEntityRepository postEntityRepository;
+
     @MockBean
     private UserEntityRepository userEntityRepository;
 
@@ -40,7 +41,6 @@ public class PostServiceTest {
         String body = "body";
         String userName = "userName";
 
-        // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(mock(UserEntity.class)));
         when(postEntityRepository.save(any())).thenReturn(mock(PostEntity.class));
 
@@ -52,7 +52,6 @@ public class PostServiceTest {
         String body = "body";
         String userName = "userName";
 
-        // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());
         when(postEntityRepository.save(any())).thenReturn(mock(PostEntity.class));
 

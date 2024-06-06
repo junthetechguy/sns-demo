@@ -35,11 +35,14 @@ public class UserController {
         User user = userService.join(request.getName(), request.getPassword());
         return Response.success(UserJoinResponse.fromUser(user));
         /*
-        그냥 바로 그대로 UserJoinResponse로 반환해줄수도 있지만 response를 내려줄때 성공하는 경우가 있고, 실패하는 경우가 있는데 이때마다 각각 response 값이 제각각이면 이 API를 가져다 쓰는 프론트엔드쪽에서 이 response를 parsing하기가 굉장히 어려우므로 획일화된 template 형태의 response template을 만들어주고 내가 내려줄 response의 형태에 따라서 해당되는 response를 넣어주기위해서 response package에 Response class를 만들어주자.
+        그냥 바로 그대로 UserJoinResponse로 반환해줄수도 있지만 response를 내려줄때 성공하는 경우가 있고, 실패하는 경우가 있는데
+        이때마다 각각 response 값이 제각각이면 이 API를 가져다 쓰는 프론트엔드쪽에서 이 response를 parsing하기가 굉장히 어려우므로
+        획일화된 template 형태의 response template을 만들어주고 내가 내려줄 response의 형태에 따라서
+        해당되는 response를 넣어주기 위해서 response package에 Response class를 만들어주자.
         */
     }
 
-    @PostMapping("/login") // health check 경로는 이 /login PATH로 한다 => 언제나 살아있고 항상 모든 Source로 부터 이 /login API PATH는 열려있으므로.
+    @PostMapping("/login") // health check 경로는 이 /login PATH로 한다 => 언제나 살아있고 항상 모든 Source로 부터 이 /login API PATH는 열려있기 때문이다.
     public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
         String token = userService.login(request.getName(), request.getPassword());
         return Response.success(new UserLoginResponse(token));

@@ -23,7 +23,7 @@ public class Response<T> { // 이 class에서 회원가입 시에는 UserJoinRes
         return new Response<>("SUCCESS", result);
     }
 
-    public String toStream() { // Response를 이쁘게 만들어주는 코드
+    public String toStream() { // Response를 이쁘게 만들어주는 코드로 이번 프로젝트에서는 commence() 부분에서 사용하도록 하자.
         if(result == null) {
             return "{" +
                     "\"resultCode\":" + "\"" + resultCode + "\"," +

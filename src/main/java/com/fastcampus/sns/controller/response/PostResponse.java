@@ -30,7 +30,7 @@ public class PostResponse {
                 post.getId(),
                 post.getTitle(),
                 post.getBody(),
-                UserResponse.fromUser(post.getUser()),
+                UserResponse.fromUser(post.getUser()), // user DTO에 들어있는 정보가 너무 많으므로 반드시 필요한 user DTO 정보(id, username)만 따로 response로 내려주자.
                 post.getRegisteredAt(),
                 post.getUpdatedAt(),
                 post.getDeletedAt()

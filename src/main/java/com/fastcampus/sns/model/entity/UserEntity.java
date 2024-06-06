@@ -38,8 +38,8 @@ public class UserEntity {
     private String password;
 
     @Column(name = "role")
-    @Enumerated(EnumType.STRING) // Enum class의 경우 항상 이런식으로 이 Enum class를 쓰는 곳에서 그 Type을 정리해서 사용한다.
-    private UserRole role = UserRole.USER;
+    @Enumerated(EnumType.STRING) // Enum class의 경우 항상 이런식으로 이 Enum class를 쓰는 곳에서 그 Type을 정의해서 사용한다.
+    private UserRole role = UserRole.USER; // 이 프로젝트에서는 default로 무조건 role에는 USER라고 들어가게 된다.
 
     @Column(name = "register_at")
     private Timestamp registeredAt;
@@ -49,7 +49,9 @@ public class UserEntity {
     * 그래야 나중에 문의가 들어왔을때 디버깅을 해야하는데 해당 데이터가
     * 언제 저장이 되고 업데이트가 되고 삭제가 되었는지에 대한 정보를 가지고 있어야 쉬우므로 그런것이다.
     * 따라서 디비에 저장할때는 어떤 테이블이든지 이 3개의 at을 함께 넣어주도록 하여 데이터 관리를 더 편하게 진행되도록 하자.
-    * 또한 해당 db의 데이터를 삭제하는 경우에는 해당 row를 실제로 삭제하는게 아니라 deleted_at 부분만 저장을 해놓는 soft delete를 하도록 하여 삭제된 시각이나 플래그를 줘서 절대로 hard delete를 하지 말자. 그래야 나중에 CS(Customer Support)가 들어왔을때 대처가 쉽다.
+    * 또한 해당 db의 데이터를 삭제하는 경우에는 해당 row를 실제로 삭제하는게 아니라 deleted_at 부분만 저장을 해놓는 soft delete를 하도록 하여
+    * 삭제된 시각이나 플래그를 줘서 절대로 hard delete를 하지 말자.
+    * 그래야 나중에 CS(Customer Support)가 들어왔을때 대처가 쉽다.
     */
 
     @Column(name = "updated_at")

@@ -11,7 +11,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 public class EmitterRepository {
-    // Sse instance 자체를 저장을 해야 해당 instance에다 connect를 해주므로 redis나 DB를 별도로 쓰지말고 local cache를 만들어서 사용하자.
+    // SseEmitter instance 자체를 저장을 해야 해당 instance에다 connect를 해주므로 redis나 DB를 별도로 쓰지말고 local cache를 만들어서 사용하자.
 
     private Map<String, SseEmitter> emitterMap = new HashMap<>();
 
@@ -41,5 +41,4 @@ public class EmitterRepository {
     // user1에게 알람이 가야 하는데 만약 알람이 생성된 곳이 서버2였다면 서버2에 connect된 user1의 web browser가 없으므로 보내줄 수 없게 되므로
     // 이처럼 다중 서버 instance인 경우에는 이 local cache 위에다가 추가로 messaging을 더 둬서 "user1에게 알람을 보내야해"를 전체 서버 instance에게 알려준 후
     // 이 instance들 중에서 user1에 커넥트되어 있는 서버 instance가 보내주는 형태로 구현이 되어야 한다. 헌데 지금 나는 인스턴스가 하나이므로 그냥 간단하게 그런거 없이 구현을 해주자.
-
 }

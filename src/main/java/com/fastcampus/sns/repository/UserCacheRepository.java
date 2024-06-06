@@ -18,10 +18,10 @@ public class UserCacheRepository { // Redis에다가 user를 caching하고 이 R
     private final static Duration USER_CACHE_TTL = Duration.ofDays(3); // TTL = 3일
 
     public void setUser(User user) {
-        String key = getKey(user.getUserName()); // 결국에 JwtTokenFilter를 탈때 username이 있는지 찾기 때문에(loaduserbyusername) 아싸리 username을 key로 설정해주자.
+        String key = getKey(user.getUsername()); // 결국에 JwtTokenFilter를 탈때 username이 있는지 찾기 때문에(loaduserbyusername) 아싸리 username을 key로 설정해주자.
         log.info("Set User to Redis {} , {}", key, user);
         // Redis는 언제나 TTL을 걸어줘서 더이상 사용하지 않는 유저의 경우에는 영원히 캐시에 남아있는 데이터가 없도록 해서 최대한 유효한 데이터만 저장해서 좀 더 공간을 효율적으로 사용하도록 하자.
-        userRedisTemplate.opsForValue().set(key, user, USER_CACHE_TTL); // TTL이 걸려있으므로 굳이 setIfAbsent()(Redis에 해당 데이터가 Absent일 경우에만 Set하는것)를 쓰지 않고 그냥 set()으로 사용해도 된다.
+        userRedisTemplate.opsForValue().set(key, user, USER_CACHE_TTL); // TTL이 걸려있으므로 굳이 setIfAbsent()(Redis에 해당 데이터가 Absent일 경우에만 Set하는것)를 쓰지 않고 그냥 바로 set()으로 사용해도 된다.
     }
 
     // Redis에 존재하지 않을 경우에 Null로 반환되므로 nullable 처리를 쉽게 하기 위해서 Optional로 감싸준 다음 서비스 단에서 getUser(이 Redis).orElseGet(DB에서 확인하는 람다식)으로 nullable을 처리해주자.

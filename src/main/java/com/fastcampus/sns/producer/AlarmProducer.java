@@ -1,6 +1,6 @@
 package com.fastcampus.sns.producer;
 
-import com.fast.campus.simplesns.model.AlarmEvent;
+import com.fastcampus.sns.model.event.AlarmEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +19,7 @@ public class AlarmProducer {
     private String topic;
 
     public void send(AlarmEvent event) {
-        alarmEventKafkaTemplate.send(topic, event.getReceiverUserId(), event);
+        alarmEventKafkaTemplate.send(topic, event.getReceiveUserId(), event);
         log.info("Send to Kafka finished");
     }
 }

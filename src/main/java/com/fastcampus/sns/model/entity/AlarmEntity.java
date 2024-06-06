@@ -52,7 +52,7 @@ public class AlarmEntity {
     // 그에 대한 정보를 args에 저장을 해두자. 지금은 사용하지 않지만 서비스가 확장할 경우를 대비하는 경우를 위해서 미리 해두자.
     // 지금까지는 column type으로 postgres에서 지원하는 type(Timestamp, String, Integer 등)만 지정해왔는데
     // 이렇게 데이터 클래스를 넣으려면 postgres에서 json type이라는 column을 지원을 하므로(MySQL에서는 8점대부터 Json 타입이 추가됨)
-    // json으로 column을 넣어서 변화무쌍하게 유연하게 AlarmArgs를 받을 수 있게 해주자.
+    // json으로 column을 넣어서 변화무쌍하고 유연하게 AlarmArgs를 받을 수 있게 해주자.
     // 가령, 00씨가 새 코멘트를 작성했습니다. 라는 알람은 postId와 commentId 모두 다 가지고 있어야 함.
     // 00외 2명이 새 코멘트를 작성했습니다. 라는 알람은 commentId가 3개가 들어가야함.
     // 이런 경우에서는 alarm type에 따라 field가 하나씩 추가되어야 하는데

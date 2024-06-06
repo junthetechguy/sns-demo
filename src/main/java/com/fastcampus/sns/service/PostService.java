@@ -36,6 +36,7 @@ public class PostService {
     public Post modify(String title, String body, String userName, Integer postId) {
         UserEntity userEntity = getUserEntityOrException(userName);
         PostEntity postEntity = getPostEntityOrException(postId);
+
         // 지금 접속된 유저와 글을 작성한 유저가 일치하는지 확인
         if (postEntity.getUser() != userEntity) {
             throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", userName, postId));
@@ -64,7 +65,7 @@ public class PostService {
     }
 
     public Page<Post> list(Pageable pageable) {
-        return postEntityRepository.findAll(pageable).map(Post::fromEntity); // 이렇게 findAll()을 하게 되면 PostEntity의 형태로 반환이 되는데 DAO는 서비스 단에서 사용하면 안되므로 이것을 Post 형태로 mapping 시켜서 사용하도록 하자.
+        return postEntityRepository.findAll(pageable).map(Post::fromEntity); // 이렇게 findAll()을 하게 되면 PostEntity의 형태로 반환이 되는데 Entity(DAO)는 서비스 단에서 사용하면 안되므로 이것을 Post 형태로 mapping 시켜서 사용하도록 하자.
     }
 
     public Page<Post> my(String userName, Pageable pageable) {
@@ -151,16 +152,15 @@ public class PostService {
 
 
     // 자주 쓰이는 코드들(공통 logic 코드)은 아래와 같이 따로 private 메소드로 빼줘서 깔끔하게 만들어주자.
-    // post exist check
+    //  user exist check
     private UserEntity getUserEntityOrException(String userName) {
         return userEntityRepository.findByUserName(userName).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not found", userName)));
-
     }
-    // user exist check
+
+    //  post exist check
     private PostEntity getPostEntityOrException(Integer postId) {
         return postEntityRepository.findById(postId).orElseThrow(() ->
                 new SnsApplicationException(ErrorCode.POST_NOT_FOUND, String.format("%s not found", postId)));
-
     }
 }

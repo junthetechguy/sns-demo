@@ -24,7 +24,7 @@ public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter {
     private String key;
 
     // application을 띄울때 FE 코드와 함께 Jar file로 말아서 띄우는데 그렇게 되면 FE 코드에는 API Header를 설정하는 부분이 들어있어서 FE 코드를 통해서 API call을 할때는 문제가 없는데
-    // 내가 만약 직접 localhost:8080으로 들어가서 view를 보는 동작(가령, favicon 가져 오는 요청)에 대해서 이때의 모든 reqeust에 대해서 token에서 user를 뽑아내는 동작이 걸리게 되므로
+    // 내가 만약 직접 localhost:8080으로 들어가서 view를 보는 동작(가령, favicon 가져 오는 Request 등)에 대해서 이때의 모든 reqeust에 대해서 token에서 user를 뽑아내는 동작이 걸리게 되므로
     // 따라서 어느 경우에만 filter를 태울건지를 정하자.
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -38,10 +38,10 @@ public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception { // HttpSecurity를 가져와서 configure을 설정하는 WebSecurityConfigurerAdapter의 method override
         http.csrf().disable() // 일단 csrf를 disable하고 내가 원하는 match 조건에 맞는 api만 잠근상태로 open해준다.
                 .authorizeRequests()
-                .antMatchers("/api/**").authenticated()  // join, login 하는 부분을 제외한 모든 부분은 항상 authentication이 이루어져야 한다.
+                .antMatchers("/api/**").authenticated()  // join, login 하는 부분을 제외한 모든 부분은 항상 authentication이 이루어져야 한다(모든 버전 포함)
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 따로 관리하지 않으므로 그냥 STATELESS로 session을 처리하자.
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 따로 관리하지 않으므로 그냥 STATELESS로 session을 처리해주자.
                 .and()
                 .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class)
                 // 매 request마다 filter를 하나 둬서 reqeust로 들어온 Token이 어떤 User를 가리키는지 체크하는 logic을 추가하기 위해서 Username과 Password Authenticaition Filter 이전에 이 JwtTokenFilter()를 태운다.

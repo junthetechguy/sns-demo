@@ -21,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor // 이 Annotation이 있어야 private final로 Bean을 가져와서 만들어줄 수 있는 것이다.
 public class AlarmService {
 
-    private final static Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
+    private final static Long DEFAULT_TIMEOUT = 60L * 1000 * 60; // 항상 상수의 경우 private final static으로 설정해준다.
     private final static String ALARM_NAME = "alarm"; // frontend에서 subscribe를 걸어둔게 alarm이라는 이름의 Event이므로 그 이름을 맞춰줘야한다.
     private final EmitterRepository emitterRepository;
     private final AlarmEntityRepository alarmEntityRepository;
@@ -29,7 +29,7 @@ public class AlarmService {
 
     // public void send(Integer alarmId, Integer userId) { // 이렇게 pararm을 받지 말고, AlarmEvent type에 맞게 param을 받아주자.
     public void send(AlarmType type, AlarmArgs arg, Integer receiverUserId) {
-        // 원래는 like와 comment 기능을 PostService 단에서 alarm save하는 부분은 이쪽으로 가져옴(decoupling) 성공 alarm send 하는 부분은 consumer 쪽에서 event consume할때 동작하도록 함
+        // 원래는 like와 comment 기능을 PostService 단에서 alarm save하는 부분은 이쪽으로 가져옴(decoupling 성공). alarm send 하는 부분은 consumer 쪽에서 event consume할때 동작하도록 함
         UserEntity user = userEntityRepository.findById(receiverUserId).orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND));
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(user, type, arg));
 
@@ -40,13 +40,13 @@ public class AlarmService {
             try {
                 sseEmitter.send(SseEmitter.event().id(alarmEntity.getId().toString()).name(ALARM_NAME).data("new alarm")); // 프론트엔드로 alarm event를 보내주자.
             } catch (IOException e) {
-                emitterRepository.delete(receiverUserId); // error가 발생하면 지워주자.
+                emitterRepository.delete(receiverUserId); // alarm을 해당 SseEmitter로 send하는데 error가 발생하면 local cache에서 해당 SseEmitter를 지워주자.
                 throw new SnsApplicationException(ErrorCode.ALARM_CONNECT_ERROR);
             }
-        }, () -> log.info("No emitter found.")); // SseEmitter가 null일 경우에는 유저가 아직 Web Browser로 접속해있지 않았을 수도 있으므로 그냥 error로 처리하지말고 log로 한번 찍어주자.
+        }, () -> log.info("No emitter found.")); // SseEmitter가 null일 경우에는 유저가 아직 Web Browser로 접속해있지 않았을 수도 있으므로 그냥 error로 처리하지말고 그냥 log로 한번만 찍어주자.
     }
 
-    // 이 SseEmitter의 정체는 결국에는 Browser connect당 하나의 인스턴스로 생기게 된다.
+    // 이 SseEmitter는 결국에는 Browser connect당 하나의 인스턴스로 생기게 된다.
     public SseEmitter connectAlarm(Integer userId) { // 맨 처음에 connection이 맺어지면 connect completed라는 event를 보내주자.
         SseEmitter sseEmitter = new SseEmitter(DEFAULT_TIMEOUT);
         emitterRepository.save(userId, sseEmitter);
