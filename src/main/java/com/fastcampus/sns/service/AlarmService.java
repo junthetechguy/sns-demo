@@ -43,7 +43,7 @@ public class AlarmService {
                 emitterRepository.delete(receiverUserId); // alarm을 해당 SseEmitter로 send하는데 error가 발생하면 local cache에서 해당 SseEmitter를 지워주자.
                 throw new SnsApplicationException(ErrorCode.ALARM_CONNECT_ERROR);
             }
-        }, () -> log.info("No emitter found.")); // SseEmitter가 null일 경우에는 유저가 아직 Web Browser로 접속해있지 않았을 수도 있으므로 그냥 error로 처리하지말고 그냥 log로 한번만 찍어주자.
+        }, () -> log.info("No emitter found.")); // SseEmitter가 null일 경우에는 유저가 아직 Web Browser로 접속해있지 않았을 수도 있으므로 error로 처리하지말고 그냥 log로 한번만 찍어주자.
     }
 
     // 이 SseEmitter는 결국에는 Browser connect당 하나의 인스턴스로 생기게 된다.

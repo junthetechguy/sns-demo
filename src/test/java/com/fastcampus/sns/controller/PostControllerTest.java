@@ -266,7 +266,6 @@ public class PostControllerTest {
     @WithMockUser
     void 댓글작성시_게시물이_없는경우() throws Exception{
 
-        // PostService의 comment method의 return type이 void이므로 doThrow 방식으로 mocking을 해준다.
         doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).comment(any(), any(), any());
 
         mockMvc.perform(post("/api/v1/posts/1/comments")
