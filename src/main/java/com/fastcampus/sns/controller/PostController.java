@@ -73,5 +73,4 @@ public class PostController {
     public Response<Page<CommentResponse>> commentList(@PathVariable Integer postId, Pageable pageable, Authentication authentication) {
         return Response.success(postService.getComments(postId, pageable).map(CommentResponse::fromComment));
     }
-
 }

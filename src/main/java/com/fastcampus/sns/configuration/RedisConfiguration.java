@@ -33,7 +33,7 @@ public class RedisConfiguration {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisURI redisURI = RedisURI.create(redisProperties.getUrl());
-        // 해당 Redis 서버의 URI를 그대로 가져와서 내 application과의 연결을 factory를 통해서 해야하는데 실제 Redis와 내 Application을 연결해주는 Factory(library)는 2개가 있다.
+        // 해당 Redis 서버의 URI를 가져와서 내 application과의 연결을 factory를 통해서 해야하는데 실제 Redis와 내 Application을 연결해주는 Factory(library)는 2개가 있다.
         // 1. Zedis(옛날 legacy 방식) library 2. Lettuce(Letty를 사용하므로 성능이 좋음) library
         org.springframework.data.redis.connection.RedisConfiguration configuration = LettuceConnectionFactory.createRedisConfiguration(redisURI);
         LettuceConnectionFactory factory = new LettuceConnectionFactory(configuration);
@@ -47,7 +47,7 @@ public class RedisConfiguration {
     // 너무 데이터가 자주 변하면 이 동작이 존나게 많이 발생하므로 select(=DBIO) 또한 존나게 발생하므로 그러면 안되므로 원본 데이터인 DB의 데이터가 변하지 않을 경우에만 캐싱해주자.
     // 두번째는 자주 사용하는 데이터를 캐싱하면 좋다. 즉, 접근이 많은 데이터를 캐싱할수록 DB의 부하가 적어지므로 언제나 자주 접근되는 데이터를 캐싱해주자.
     // 이번 서비스에서는 user같은 경우에 매 API Call마다 필터를 한번 타서 그 유저가 존재하는지 안하는지 DB에서 체크를 하게 되므로 이 부분을 캐시로해주자. 또한 user data 같은 경우에는 현재 스펙상으로 변경할 수 없고,
-    // 만약 user data가 변경될 수 있는 spec이 추가되더라도 post list나 alarm list나 comment list처럼 빈번하게 변화가 발생하는 부분이 아니고 그런 데이터들 보다는 적게 변화하는 데이터이므로
+    // 만약 user data가 변경될 수 있는 spec이 추가되더라도 post entity나 alarm entity나 comment entity처럼 빈번하게 변화가 발생하는 부분이 아니고 그런 데이터들 보다는 적게 변화하는 데이터이므로
     // user data를 redis caching 해주자.
 
     // RedisTemplate에는 key와 어떤 Data를 caching할지 Data Type(언제나 Entity(=DAO)말고, DTO를 적어두자)으로 정해야한다.

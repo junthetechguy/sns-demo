@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
-public enum ErrorCode {
+public enum ErrorCode { // TDD로 Test Code를 먼저 작성하면서 발생할 수 있는 ErrorCode들을 미리 Enum class로 모아서 정의해둔 것.
     DUPLICATED_USER_NAME(HttpStatus.CONFLICT, "User name is duplicated"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not found"),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Password is invalid"),

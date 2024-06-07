@@ -19,7 +19,7 @@ import java.time.Instant;
 @Table(name = "\"alarm\"", indexes = {
         @Index(name = "user_id_idx", columnList = "user_id")
 })
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class) // opensource library에서 들어있는 JsonBinaryType.class가 jsonb type이라고 정의해주자.
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class) // opensource library에 들어있는 JsonBinaryType.class가 jsonb type이라고 정의해주자.
 @SQLDelete(sql = "UPDATE \"alarm\" SET deleted_at = NOW() WHERE id=?")
 @Where(clause = "deleted_at is NULL")
 public class AlarmEntity {
