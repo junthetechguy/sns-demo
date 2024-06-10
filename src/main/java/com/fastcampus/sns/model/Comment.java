@@ -1,7 +1,6 @@
 package com.fastcampus.sns.model;
 
 import com.fastcampus.sns.model.entity.CommentEntity;
-import com.fastcampus.sns.model.entity.PostEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -35,5 +34,4 @@ public class Comment {
                 entity.getDeletedAt()
         );
     }
-
 }

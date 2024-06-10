@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class UserServiceTest {
     @Autowired
-    private UserService userService; // 이 Test 코드에서 Test할 것만(가령, 여기서는 해당되는 Service인 UserService만) Autowired로 받아오고, 나머지는 전부 다 MockBean으로 만들어줘서 이미 Bean으로 올라와있는 것을 Mocking을 해주자.
+    private UserService userService;
     @MockBean
     private UserEntityRepository userEntityRepository;
     @MockBean
@@ -35,7 +35,8 @@ public class UserServiceTest {
         // JPA에서 find는 Optional로 반환이되므로 Optional.of로 감싸주자
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty()); // 유저가 존재하지 않아야 하므로 empty로 반환이 되어야 함
         when(encoder.encode(password)).thenReturn("encrpt_password"); // String type으로 반환된다.
-        when(userEntityRepository.save(any())).thenReturn(UserEntityFixture.get(userName, password, 1)); // any()는 그냥 바로 무조건 실행이 되는 것으로 일단 save가 되면 반드시 이 UserEntity class type이 나와야 한다.
+        when(userEntityRepository.save(any())).thenReturn(UserEntityFixture.get(userName, password, 1));
+        // any()는 그냥 바로 무조건 실행이 되는 것으로 일단 save가 되면 반드시 이 UserEntity class type이 나와야 한다.
 
         Assertions.assertDoesNotThrow(() -> userService.join(userName, password)); // 정상적으로 join을 했을때 아무런 error도 throw되면 안되도록 설정한다.
     }
@@ -50,10 +51,9 @@ public class UserServiceTest {
         when(encoder.encode(password)).thenReturn("encrpt_password");
         when(userEntityRepository.save(any())).thenReturn(Optional.of(fixture));
 
-        SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class, () -> userService.join(userName, password)); // 반드시 이 경우의 join은 SnsApplicationClass라는 Object type을 반환해야함.
+        SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class, () -> userService.join(userName, password)); // 반드시 이 경우의 join은 SnsApplication.Class라는 Object type을 반환해야함.
         Assertions.assertEquals(ErrorCode.DUPLICATED_USER_NAME, e.getErrorCode());
     }
-
 
     @Test
     void 로그인이_정상적으로_동작하는_경우() {

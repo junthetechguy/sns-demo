@@ -12,7 +12,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class UserCacheRepository { // Redis에다가 user를 caching하고 이 Redis에서 user를 다시 가져오기 위한 클래스이다.
+public class UserCacheRepository { // Redis에다가 user를 caching 시키고 이 Redis에서 user를 다시 가져오기 위한 클래스이다.
 
     private final RedisTemplate<String, User> userRedisTemplate;
     private final static Duration USER_CACHE_TTL = Duration.ofDays(3); // TTL = 3일
@@ -35,7 +35,8 @@ public class UserCacheRepository { // Redis에다가 user를 caching하고 이 R
 
     // Redis는 보통 하나의 Cluster로 만들어두고 거기에다가 서비스에 쓰는 모든 Caching을 다 넣게 된다.
     // 지금 나는 user만 caching하게 되지만 나중에 서비스가 확장된다면 존나게 다른 여러가지 데이터들도 caching을 할 수도 있으므로
-    // key 값을 그저 userName으로 하게 되면 이게 어떤 데이터의 key 값인지 알아보기 어려우므로 Redis에 저장할때는 언제나 아래와 같이 prefix(어떤 정보를 저장하는지에 대한 정보)를 붙여준다.
+    // key 값을 그저 userName으로만 하게 되면 이게 어떤 데이터의 key 값인지 알아보기 어려우므로
+    // Redis에 저장할때는 언제나 아래와 같이 prefix(어떤 정보를 저장하는지에 대한 정보)를 붙여준다.
     private String getKey(String userName) {
         return "USER:" + userName;
     }

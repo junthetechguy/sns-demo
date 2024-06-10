@@ -22,7 +22,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfiguration {
 
     // Redis 뿐만 아니라 DB나 다른 것들도 property 설정 관련 정보는 싹다 application.yaml 파일에 넣고, 그 데이터를 소스코드로 가지고 와서 사용하게 되는데
-    // 그 이유는 최대한 decoupling해서 재사용성이나 환경 migration시 발생할 수 있는 문제점을 따로 value 형태로 applicaiton.yaml만 고치면 직접 소스코드를 수정하지 않아도
+    // 그 이유는 최대한 decoupling해서 Reusability나 환경 migration시 발생할 수 있는 문제점을 따로 value 형태로 applicaiton.yaml만 고치면 직접 소스코드를 수정하지 않아도
     // 되도록 하기 위함이다. 또한 지금의 경우에는 이러한 yaml file을 resources package 아래에 뒀지만 따로 서버를 둬서 그 서버에서 끌어와서 이 yaml file을 update하는 경우도 있다.
     // 그러면 yaml file은 단지 configuration 역할만 할뿐이고, business logic이 아니기 때문에 소스 코드 수정 없이 그냥 configuration만 이쪽으로 설정해두면 개꿀이다.
     // 그렇기 때문에 언제나 모든 configuration은 별도의 yaml file로 빼두자.

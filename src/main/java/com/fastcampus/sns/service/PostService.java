@@ -140,9 +140,7 @@ public class PostService {
 
         // 헌데 위의 두 로직은 user가 기다릴 필요가 없으므로 AlarmProducer로 send만 해준 후에 위의 두 메소드를 실행하여 SSE를 날리는 것은 consumer가 소비가 된 후에 메소드가 실행되서 SSE를 날리도록 하자.
          */
-
         alarmProducer.send(new AlarmEvent(postEntity.getUser().getId(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postId)));
-
     }
 
     public Page<Comment> getComments(Integer postId, Pageable pageable) {

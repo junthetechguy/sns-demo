@@ -34,7 +34,7 @@ public class AlarmService {
         AlarmEntity alarmEntity = alarmEntityRepository.save(AlarmEntity.of(user, type, arg));
 
 
-        // Browser connect당 하나의 인스턴스로 생기게 되는 SseEmitter들 중에 해당 브라우저에 해당되는 SseEmitter를 직접 찾아서 event 정보를 보내줘야 한다.
+        // Browser connect당 하나의 인스턴스로 생기게 되는 SseEmitter들 중에 해당 브라우저에 해당되는 SseEmitter를 직접 찾아서 event 정보를 보내줘야만 한다.
         // 따라서 이 SseEmitter(=결국 이게 Sse)를 저장할 class인 emitterRepository를 만들어주자.
         emitterRepository.get(receiverUserId).ifPresentOrElse(sseEmitter -> { // userId로 저장을 했으므로 userId로 가져와주자.
             try {

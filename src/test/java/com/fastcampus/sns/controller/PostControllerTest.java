@@ -3,7 +3,6 @@ package com.fastcampus.sns.controller;
 import com.fastcampus.sns.controller.request.PostCommentRequest;
 import com.fastcampus.sns.controller.request.PostCreateRequest;
 import com.fastcampus.sns.controller.request.PostModifyRequest;
-import com.fastcampus.sns.controller.request.UserJoinRequest;
 import com.fastcampus.sns.exception.ErrorCode;
 import com.fastcampus.sns.exception.SnsApplicationException;
 import com.fastcampus.sns.fixture.PostEntityFixture;
@@ -31,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PostControllerTest {
+public class PostControllerTest { // 즉, Service를 MockBean으로 받아와서 제대로 API가 들어올시 해당 Service의 정상동작여부를 검증한다.
     @Autowired
     private MockMvc mockMvc;
 
@@ -265,7 +264,6 @@ public class PostControllerTest {
     @Test
     @WithMockUser
     void 댓글작성시_게시물이_없는경우() throws Exception{
-
         doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).comment(any(), any(), any());
 
         mockMvc.perform(post("/api/v1/posts/1/comments")

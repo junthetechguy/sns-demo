@@ -23,7 +23,7 @@ import java.time.Instant;
 model의 entity는 DAO로 실제로 DB의 Table에서 부터 Jpa Repository(@Repository 붙은 것들)을 통해서 실제로 mapping되는 클래스들의 집합이고,
 model에 속하지만 entity가 아닌 것들은 DTO로 DAO에서 정보를 가지고 와서 서비스 단에서 뭔가를 처리할 때 사용한다.
 왜냐하면 이 2개가 구분이 안되면 나는 jpa를 사용하기 때문에
-이 클래스 자체의 변화에 굉장히 민감하기때문에 단순히 DTO에 있는 어떤 필드를 변경하고 싶었고
+클래스 자체의 변화에 굉장히 민감하기때문에 단순히 DTO에 있는 어떤 필드를 변경하고 싶었고
 db의 변경에는 영향을 주고 싶지 않을때가 존재하므로 언제나 DAO와 DTO로 분리해서 사용하자.
  */
 public class UserEntity {
@@ -81,5 +81,4 @@ public class UserEntity {
     DB에 저장할때만 DAO인 Entity를 사용하고,
     서비스단에서는 사용할때는 DTO로 분리해서 사용하여 최대한 DB 변화에 영향을 주면 안되도록 하자.
      */
-
 }

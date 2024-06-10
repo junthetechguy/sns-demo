@@ -1,7 +1,6 @@
 package com.fastcampus.sns.model;
 
 import com.fastcampus.sns.model.entity.PostEntity;
-import com.fastcampus.sns.model.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -35,5 +34,4 @@ public class Post {
                 entity.getDeletedAt()
         );
     }
-
 }

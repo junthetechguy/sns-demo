@@ -1,6 +1,5 @@
 package com.fastcampus.sns.service;
 
-import com.fastcampus.sns.SnsApplication;
 import com.fastcampus.sns.exception.ErrorCode;
 import com.fastcampus.sns.exception.SnsApplicationException;
 import com.fastcampus.sns.fixture.PostEntityFixture;
@@ -24,7 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class PostServiceTest {
+public class PostServiceTest { // Service 단 테스트는 해당 Service Method에서 사용되는 Repository method의 순서대로 진행하면서 발생할 수 있는 문제점들에 대해서 제대로 내가 설정한 Response Code가 뜨는지 검증하는 것이다. 즉, Repository를 MockBean으로 받아와서 JPA의 정상동작여부를 검증한다.
 
     @Autowired
     private PostService postService;
@@ -46,6 +45,7 @@ public class PostServiceTest {
 
         Assertions.assertDoesNotThrow(() -> postService.create(title, body, userName));
     }
+
     @Test
     void 포스트작성시_요청한유저가_존재하지않는경우() {
         String title = "title";
