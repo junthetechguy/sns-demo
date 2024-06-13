@@ -46,12 +46,8 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        // join이 정상적으로 진행될때 순차적으로 수행되는 모든 동작을(여기선 유일하게 join service logic이 들어가는 것 뿐) 순서대로 mocking
-        // mocking하는 부분 : Service logic이 돌아가는 부분으로 when->thenReturn의 구조로 진행.
         when(userService.join(userName, password)).thenReturn(mock(User.class));
         // 정상적으로 동작이 되어야하므로 User.class가 반환이 되어야 함. 또한 when->thenReturn의 경우 Object Type만 본다. 가령, 같은 클래스인지 등을 파악한다.
-
-        // 언제나 Controller 단 test code는 먼저 service 동작을 when->then으로 mocking scenario를 설정 후 mockMvc.perform으로 API test를 해주자.
 
         mockMvc.perform(post("/api/v1/users/join")
                 .contentType(MediaType.APPLICATION_JSON)
