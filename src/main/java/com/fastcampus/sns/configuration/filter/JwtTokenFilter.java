@@ -56,13 +56,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
             // 만약 token이 valid하다면 user도 valid한지 확인 후 request context에 이 Authentication 정보를 넣어서 controller로 보내주자.
             String userName = JwtTokenUtils.getUserName(token, key);
-            User user = userService.loadUserByUserName(userName); // 이 loadUserByUserName() 부분은 Cache를 통해서 줄여주 자.
+            User user = userService.loadUserByUserName(userName); // 이 loadUserByUserName() 부분은 Cache를 통해서 줄여주자.
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     user, null, user.getAuthorities()); // Principal param에는 user를 넣고, credentials param은 null을 넣고, authorities param에는 해당 user의 userRole을 List 형태로 집어넣는다.
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             log.error("Error occurs while validating, {}", e.toString());
             filterChain.doFilter(request, response);
             return;

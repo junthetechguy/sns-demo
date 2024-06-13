@@ -1,7 +1,7 @@
 package com.fastcampus.sns.controller.response;
 
 import com.fastcampus.sns.model.Alarm;
-import com.fastcampus.sns.model.AlarmArgs;
+import com.fastcampus.sns.model.entity.AlarmArgs;
 import com.fastcampus.sns.model.entity.AlarmType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +32,4 @@ public class AlarmResponse {
                 alarm.getDeletedAt()
         );
     }
-
 }

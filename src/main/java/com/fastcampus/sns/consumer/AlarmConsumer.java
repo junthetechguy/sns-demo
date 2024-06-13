@@ -18,7 +18,7 @@ public class AlarmConsumer {
     @KafkaListener(topics = "${spring.kafka.topic.alarm}") // 얘가 Consumer인 것을 표기하기 위해서 @KafkaListner(consuming하는 topic)를 달아주자.
     public void consumeNotification(AlarmEvent event, Acknowledgment ack) {
         log.info("Consume the event {}", event);
-        alarmService.send(event.getAlarmType(), event.getArgs(), event.getReceiveUserId()); // PostService에서 DB에 저장하고 sse send 하던 부분을 여기 consumer 단에서 처리해주자.
+        alarmService.send(event.getAlarmType(), event.getArgs(), event.getReceiveUserId()); // PostService에서 alarm DB에 저장하고 sse send 하던 부분을 여기 consumer 단에서 처리해주자.
         ack.acknowledge(); // consuming 한 후 DB에 저장하고 sse send 해준 후에는 ack를 날려주자.
     }
 }

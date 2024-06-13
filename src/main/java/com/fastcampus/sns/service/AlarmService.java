@@ -2,7 +2,7 @@ package com.fastcampus.sns.service;
 
 import com.fastcampus.sns.exception.ErrorCode;
 import com.fastcampus.sns.exception.SnsApplicationException;
-import com.fastcampus.sns.model.AlarmArgs;
+import com.fastcampus.sns.model.entity.AlarmArgs;
 import com.fastcampus.sns.model.entity.AlarmEntity;
 import com.fastcampus.sns.model.entity.AlarmType;
 import com.fastcampus.sns.model.entity.UserEntity;

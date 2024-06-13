@@ -70,6 +70,9 @@ public class UserService {
         return token;
     }
 
+    // join과 login은 authentication으로 잠겨있지 않으므로 userName으로 받는다.
+    // 나머지 api server들은 authentication으로 잠겨있으므로 authentication에 들어있는 user로 받는다.
+
     public User loadUserByUserName(String userName) {
         // 일단 Redis에서 찾아보고, Redis에 없으면 UserEntityRepository에서 가져오고 이때 User class의 형태로 가져오고, 없으면 Exception을 낸다.
         return userCacheRepository.getUser(userName).orElseGet(() ->

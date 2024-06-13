@@ -13,9 +13,9 @@ public class Comment {
 
     private String comment;
 
-    private String userName; // comment에서 필요한 user 정보는 userName만 필요하므로 Entity(DAO)에서 사용하는 UserEnity type이 아니라 DTO에서는 따로 String userName으로 설정해두자.
+    private String userName; // comment에서 필요한 user 정보는 userName만 필요하므로 Entity에서 사용하는 UserEnity type이 아니라 DTO에서는 따로 String userName으로 설정해두자.
 
-    private Integer postId; // 마찬가지로 comment에서 필요한 post 정보는 postId만 필요하므로 Entity(DAO)에서 사용하는 PostEntity type이 아니라 DTO에서는 따로 Integer postId로 설정해두자.
+    private Integer postId; // 마찬가지로 comment에서 필요한 post 정보는 postId만 필요하므로 Entity에서 사용하는 PostEntity type이 아니라 DTO에서는 따로 Integer postId로 설정해두자.
 
     private Timestamp registeredAt;
 

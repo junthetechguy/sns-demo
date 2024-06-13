@@ -1,6 +1,5 @@
 package com.fastcampus.sns.model.entity;
 
-import com.fastcampus.sns.model.AlarmArgs;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Getter;
 import lombok.Setter;

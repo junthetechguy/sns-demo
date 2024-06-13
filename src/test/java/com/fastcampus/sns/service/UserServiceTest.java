@@ -51,7 +51,7 @@ public class UserServiceTest {
         when(encoder.encode(password)).thenReturn("encrpt_password");
         when(userEntityRepository.save(any())).thenReturn(Optional.of(fixture));
 
-        SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class, () -> userService.join(userName, password)); // 반드시 이 경우의 join은 SnsApplication.Class라는 Object type을 반환해야함.
+        SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class, () -> userService.join(userName, password)); // 반드시 이 경우의 join은 SnsApplicationException.Class라는 Object type을 반환해야함.
         Assertions.assertEquals(ErrorCode.DUPLICATED_USER_NAME, e.getErrorCode());
     }
 

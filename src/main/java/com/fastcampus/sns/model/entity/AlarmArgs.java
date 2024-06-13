@@ -1,4 +1,4 @@
-package com.fastcampus.sns.model;
+package com.fastcampus.sns.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

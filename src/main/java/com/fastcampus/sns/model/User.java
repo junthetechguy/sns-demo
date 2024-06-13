@@ -1,6 +1,7 @@
 package com.fastcampus.sns.model;
 
 import com.fastcampus.sns.model.entity.UserEntity;
+import com.fastcampus.sns.model.entity.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class User implements UserDetails { // Token으로 User를 가지고 올�
     private Timestamp deletedAt;
 
 
-    public static User fromEntity(UserEntity entity) { // DAO(Entity)를 DTO로 변환해주는 메소드
+    public static User fromEntity(UserEntity entity) { // Entity를 DTO로 변환해주는 메소드
         return new User(
                 entity.getId(),
                 entity.getUserName(),

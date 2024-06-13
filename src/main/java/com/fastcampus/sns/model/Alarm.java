@@ -1,10 +1,10 @@
 package com.fastcampus.sns.model;
 
+import com.fastcampus.sns.model.entity.AlarmArgs;
 import com.fastcampus.sns.model.entity.AlarmEntity;
 import com.fastcampus.sns.model.entity.AlarmType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Timestamp;
 @Getter

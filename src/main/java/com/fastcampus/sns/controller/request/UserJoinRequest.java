@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter // 항상 request와 response는 @Getter, @AllArgsConstructor, @NoArgsConstructor를 만들어주자.
+@Getter // 항상 request와 response는 @Getter, @AllArgsConstructor, @NoArgsConstructor를 달아주자.
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserJoinRequest { // 회원가입시 보낼 Reqeust의 Body 부분에 들어갈 정보
