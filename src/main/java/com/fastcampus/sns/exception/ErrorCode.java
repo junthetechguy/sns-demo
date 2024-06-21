@@ -3,6 +3,7 @@ package com.fastcampus.sns.exception;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+
 @Getter
 @AllArgsConstructor
 public enum ErrorCode { // TDD로 Test Code를 먼저 작성하면서 발생할 수 있는 ErrorCode들을 미리 Enum class로 모아서 정의해둔 것.

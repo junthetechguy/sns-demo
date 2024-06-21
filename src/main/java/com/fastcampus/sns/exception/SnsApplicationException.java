@@ -15,8 +15,8 @@ public class SnsApplicationException extends RuntimeException{
         this.message = null;
     }
 
-    @Override // RuntimeException class에 존재하는 getMessage() method override한 것
-    public String getMessage() { // 비록 이번엔 쓰인진 않겠지만(이번 프로젝트에서는 GlobalControllerAdvice로 SnsApplicationException.class 발생 시 잡아서 반영함) 항상 이런식으로 SnsApplicationException.getMessage()를 하는 경우 이런식으로 내려준다.
+    @Override // Message Getter Override 해준 것 => 이유 : message가 null일 수도 있으므로 이 경우를 미리 대비함.
+    public String getMessage() {
         if (message == null) {
             return errorCode.getMessage();
         }

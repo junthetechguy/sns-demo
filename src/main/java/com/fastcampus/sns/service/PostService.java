@@ -65,12 +65,13 @@ public class PostService {
     }
 
     public Page<Post> list(Pageable pageable) {
-        return postEntityRepository.findAll(pageable).map(Post::fromEntity); // 이렇게 findAll()을 하게 되면 PostEntity의 형태로 반환이 되는데 Entity(DAO)는 서비스 단에서 사용하면 안되므로 이것을 Post 형태로 mapping 시켜서 사용하도록 하자.
+        return postEntityRepository.findAll(pageable).map(Post::fromEntity); // 이렇게 findAll()을 하게 되면 PostEntity의 형태로 반환이 되는데 Entity는 서비스 단에서 사용하면 안되므로 이것을 Post 형태로 mapping 시켜서 사용하도록 하자.
     }
 
     public Page<Post> my(String userName, Pageable pageable) {
         UserEntity userEntity = getUserEntityOrException(userName);
 
+        // 이럴땐 반드시 Index 처리를 해주자.
         return postEntityRepository.findAllByUser(userEntity, pageable).map(Post::fromEntity);
     }
 

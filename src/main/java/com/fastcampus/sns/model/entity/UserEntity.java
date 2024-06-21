@@ -10,14 +10,13 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-// 항상 Entity는 @Setter, @Getter, @Entity, @NoArgsConstructor가 필수다.
+// 항상 Entity는 @Setter, @Getter, @Entity가 필수다.
 @Setter
 @Getter
 @Entity // Jpa Repository에서 사용될 entity임을 나타내는 Annotation
 @Table(name = "\"user\"") // postgreSQL 같은 경우에는 이미 user라는 table이 존재하므로 (실제로 테이블에 접근할 수 있는 user의 권한을 관리하는 테이블) 항상 ”\”를 user에 붙여야 내가 만든 user 테이블로 인식된다.
 @SQLDelete(sql = "UPDATE \"user\" SET deleted_at = NOW() WHERE id=?") // Delete의 경우 삭제된 시간을 넣어줄때 만약 delete sql이 날라오게 되면 이런식으로 deleted_at에 자동으로 시간이 들어가게 하자.
 @Where(clause = "deleted_at is NULL") // Select를 할때는 삭제가 안된 애들(deleted_at이 NULL인 애들)만 가지고 올 수 있게 하자.
-@NoArgsConstructor
 /*
 나는 jpa를 사용하기 때문에
 클래스 자체의 변화에 굉장히 민감하기때문에 단순히 DTO에 있는 어떤 필드를 변경하고 싶었고
@@ -67,7 +66,7 @@ public class UserEntity {
         this.updatedAt = Timestamp.from(Instant.now());
     }
 
-    // User table에 UserEntity를 CRUD할때 DAO를 그대로 갖다가 넣는게 아니라 DAO를 최대한 분리하기 위해서 UserEntity를 반환하는 of 메소드
+    // User table에 UserEntity를 CRUD할때 Entity를 그대로 갖다가 넣는게 아니라 Entity를 최대한 분리하기 위해서 UserEntity를 반환하는 of 메소드
     public static UserEntity of(String userName, String password) {
         UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userName);

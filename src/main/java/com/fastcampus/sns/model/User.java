@@ -22,7 +22,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true) // JsonIgnore를 먹히게 하기 위한 Annotation
 public class User implements UserDetails { // Token으로 User를 가지고 올때 UserDetails를 implement해서 override로 가지고 오지 않으면 제대로 user를 가져오지 못하므로 구현해주자.
     private Integer id;
-    private String username; // UserDetails에 getUsername() method를 implement 해야하므로 그냥 annotation을 @Data 단걸로 퉁치도록 하자.
+    private String username; // UserDetails에 getUsername() method(Authentication에서 principal의 이름을 가냥 바로 가져오는 부분을 implement 해야하므로 그냥 annotation을 @Data 단걸로 퉁치도록 하자.
     private String password;
     private UserRole userRole;
     private Timestamp registeredAt;

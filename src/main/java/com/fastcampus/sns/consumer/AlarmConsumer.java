@@ -4,8 +4,6 @@ import com.fastcampus.sns.model.event.AlarmEvent;
 import com.fastcampus.sns.service.AlarmService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 @Slf4j

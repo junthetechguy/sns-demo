@@ -73,6 +73,7 @@ public class UserController {
         User user = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), User.class).orElseThrow(
                 () -> new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR,
                         "Casting to User class failed"));
+
         return alarmService.connectAlarm(user.getId());
     }
 }

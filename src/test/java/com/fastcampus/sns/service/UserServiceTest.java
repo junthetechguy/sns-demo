@@ -48,8 +48,6 @@ public class UserServiceTest {
         UserEntity fixture = UserEntityFixture.get(userName, password, 1);
 
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture)); // 유저가 존재하므로 이미 만들어진 UserEntity type의 Object가 반환된다.
-        when(encoder.encode(password)).thenReturn("encrpt_password");
-        when(userEntityRepository.save(any())).thenReturn(Optional.of(fixture));
 
         SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class, () -> userService.join(userName, password)); // 반드시 이 경우의 join은 SnsApplicationException.Class라는 Object type을 반환해야함.
         Assertions.assertEquals(ErrorCode.DUPLICATED_USER_NAME, e.getErrorCode());
